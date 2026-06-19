@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Ready — Remote Social Work Mastery</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:780px;
+    margin:0 auto;
+    padding:32px 24px 100px;
+  }
+
+  .welcome-header{
+    text-align:center;
+    margin-bottom:30px;
+  }
+  .welcome-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.1em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:10px;
+  }
+  .welcome-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:30px;
+    margin:0 0 12px;
+  }
+  .welcome-sub{
+    font-size:15px;
+    color:var(--warmgray);
+    max-width:480px;
+    margin:0 auto;
+    line-height:1.6;
+  }
+
+  .progress-shelf{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:6px;
+    box-shadow:var(--shadow);
+    padding:18px 24px;
+    margin-bottom:30px;
+    display:flex;
+    align-items:center;
+    gap:20px;
+  }
+  .shelf-icon{
+    font-family:'Source Serif 4', serif;
+    font-size:22px;
+    font-weight:600;
+    color:var(--sage-deep);
+    flex-shrink:0;
+    width:56px;
+    height:56px;
+    border-radius:50%;
+    background:rgba(92,138,134,0.1);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .shelf-text{flex:1;}
+  .shelf-label{
+    font-family:'Inter';
+    font-weight:600;
+    font-size:14px;
+    margin-bottom:5px;
+  }
+  .shelf-track{
+    height:6px;
+    background:var(--line);
+    border-radius:3px;
+    overflow:hidden;
+  }
+  .shelf-fill{
+    height:100%;
+    background:var(--sage);
+    border-radius:3px;
+    width:0%;
+    transition:width 0.5s ease;
+  }
+
+  .domain-section{
+    margin-bottom:22px;
+  }
+  .domain-label-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:10px;
+  }
+  .domain-icon{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--warmgray);
+    width:22px;
+    height:22px;
+    border:1px solid var(--line);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex-shrink:0;
+  }
+  .domain-icon.complete{
+    background:var(--sage-deep);
+    border-color:var(--sage-deep);
+    color:#fff;
+  }
+  .domain-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:16.5px;
+  }
+
+  .item-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:5px;
+    box-shadow:var(--shadow);
+    margin-bottom:9px;
+    padding:0;
+    overflow:hidden;
+    transition: transform 0.35s ease, opacity 0.2s ease;
+  }
+  .item-row{
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    padding:14px 16px;
+    cursor:pointer;
+  }
+  .item-checkbox{
+    width:21px; height:21px;
+    border:2px solid var(--line);
+    border-radius:4px;
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+  }
+  .item-checkbox.checked{
+    background:var(--sage-deep);
+    border-color:var(--sage-deep);
+  }
+  .item-checkbox svg{
+    width:13px; height:13px;
+    opacity:0;
+    transition:opacity 0.15s ease;
+  }
+  .item-checkbox.checked svg{ opacity:1; }
+
+  .item-text{flex:1;}
+  .item-title{
+    font-family:'Inter';
+    font-weight:500;
+    font-size:14.5px;
+    color:var(--ink);
+    transition: color 0.2s ease;
+  }
+  .item-card.settled .item-title{
+    color:var(--warmgray);
+  }
+  .item-detail{
+    font-size:12.5px;
+    color:var(--warmgray);
+    margin-top:3px;
+    line-height:1.45;
+  }
+
+  .item-card.settled{
+    background:#FBFAF6;
+  }
+
+  .completion-card{
+    display:none;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:8px;
+    padding:32px 30px;
+    text-align:center;
+    margin-top:30px;
+  }
+  .completion-card.show{ display:block; animation:fadeUp 0.5s ease; }
+  @keyframes fadeUp{ from{opacity:0; transform:translateY(10px);} to{opacity:1; transform:translateY(0);} }
+
+  .completion-stamp{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.1em;
+    text-transform:uppercase;
+    color:#8FCBC0;
+    margin-bottom:12px;
+  }
+  .completion-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:22px;
+    margin:0 0 10px;
+  }
+  .completion-text{
+    font-size:14.5px;
+    color:#D8D2C2;
+    max-width:440px;
+    margin:0 auto 20px;
+    line-height:1.6;
+  }
+  .completion-card .name-line{
+    border-top:1px solid rgba(255,255,255,0.15);
+    border-bottom:1px solid rgba(255,255,255,0.15);
+    padding:14px 0;
+    margin:18px 0;
+  }
+  .name-input{
+    background:transparent;
+    border:none;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+    color:#EDE8DC;
+    font-family:'Source Serif 4', serif;
+    font-style:italic;
+    font-size:16px;
+    text-align:center;
+    padding:4px 8px;
+    width:240px;
+  }
+  .name-input::placeholder{ color:#8B8478; }
+  .name-input:focus-visible{ outline:none; border-bottom-color:#8FCBC0; }
+
+  .completion-date{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:#A8B5B3;
+  }
+
+  .hidden{display:none !important;}
+
+  @media (prefers-reduced-motion: reduce){
+    .item-card, .completion-card{ transition:none; animation:none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="welcome-header">
+    <span class="welcome-eyebrow">Cohort 5 · Day One</span>
+    <h1 class="welcome-title">Before your first live session</h1>
+    <p class="welcome-sub">Remote practice starts with the space you build around it. Work through this once — it's yours to keep coming back to, not a form to submit.</p>
+  </div>
+
+  <div class="progress-shelf">
+    <div class="shelf-icon" id="shelf-icon">0%</div>
+    <div class="shelf-text">
+      <div class="shelf-label" id="shelf-label">Getting your space ready</div>
+      <div class="shelf-track"><div class="shelf-fill" id="shelf-fill"></div></div>
+    </div>
+  </div>
+
+  <div id="domains-container"></div>
+
+  <div class="completion-card" id="completion-card">
+    <div class="completion-stamp">Ready</div>
+    <h2 class="completion-title">You're set up.</h2>
+    <p class="completion-text">That's the whole point of this — not a checklist for its own sake, but a moment to actually notice you're ready before things get busy. See you Monday.</p>
+    <div class="name-line">
+      <input type="text" class="name-input" id="name-input" placeholder="Type your name">
+    </div>
+    <div class="completion-date" id="completion-date"></div>
+  </div>
+
+</div>
+
+<script>
+const domains = [
+  {
+    key:'workspace',
+    title:'Your physical workspace',
+    items:[
+      {id:'w1', title:'A space where client conversations stay private', detail:'Door that closes, or a way to signal you\'re not to be interrupted.'},
+      {id:'w2', title:'Headphones or a setup that keeps audio from carrying', detail:'Especially important if you share your home with others.'},
+      {id:'w3', title:'Something in view that signals "I\'m working" to others nearby', detail:'A closed door, a sign, a routine — whatever works for your household.'}
+    ]
+  },
+  {
+    key:'tech',
+    title:'Technology you can rely on',
+    items:[
+      {id:'t1', title:'A device that can run Zoom and Thinkific reliably', detail:'Tested, not assumed — open both once before Monday.'},
+      {id:'t2', title:'A backup plan if your internet drops mid-session', detail:'Phone hotspot, a neighbor\'s wifi, or knowing who to message.'},
+      {id:'t3', title:'Charger or power source within reach during sessions', detail:'A dead laptop mid-call is avoidable.'}
+    ]
+  },
+  {
+    key:'platform',
+    title:'Platform access',
+    items:[
+      {id:'p1', title:'Logged into Thinkific and can find this course', detail:'If you\'re reading this, you\'re most of the way there.'},
+      {id:'p2', title:'Zoom installed and tested — camera and mic working', detail:'Join a test call if you haven\'t used this Zoom account before.'},
+      {id:'p3', title:'You know where session links and recordings will live', detail:'Bookmark it now so you\'re not searching for it later.'}
+    ]
+  },
+  {
+    key:'docs',
+    title:'Documentation habits',
+    items:[
+      {id:'d1', title:'A place you\'ll keep notes from live sessions', detail:'Doesn\'t matter what — just decide now, not mid-session.'},
+      {id:'d2', title:'A place for the Digital Impact Challenge project as it develops', detail:'You\'ll be glad you started a folder early.'}
+    ]
+  },
+  {
+    key:'mindset',
+    title:'Boundaries and mindset',
+    items:[
+      {id:'m1', title:'A clear start and end time for your own work blocks', detail:'Remote work without edges tends to expand into everything.'},
+      {id:'m2', title:'One honest thing you\'re unsure about going into this course', detail:'Naming it now makes it easier to bring up later — to a peer, or in session.'}
+    ]
+  }
+];
+
+let checked = {};
+
+function totalItems(){
+  return domains.reduce((sum,d)=> sum + d.items.length, 0);
+}
+
+function checkedCount(){
+  return Object.values(checked).filter(Boolean).length;
+}
+
+function renderDomains(){
+  const container = document.getElementById('domains-container');
+  container.innerHTML = domains.map(d => `
+    <div class="domain-section">
+      <div class="domain-label-row">
+        <span class="domain-icon" id="domicon-${d.key}"></span>
+        <span class="domain-title">${d.title}</span>
+      </div>
+      ${d.items.map(item => `
+        <div class="item-card" id="card-${item.id}">
+          <div class="item-row" data-id="${item.id}">
+            <div class="item-checkbox" id="check-${item.id}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+            </div>
+            <div class="item-text">
+              <div class="item-title">${item.title}</div>
+              <div class="item-detail">${item.detail}</div>
+            </div>
+          </div>
+        </div>
+      `).join('')}
+    </div>
+  `).join('');
+
+  domains.forEach(d=>{
+    d.items.forEach(item=>{
+      const row = document.querySelector(`#card-${item.id} .item-row`);
+      row.addEventListener('click', ()=> toggleItem(item.id, d.key));
+    });
+  });
+
+  updateAllVisuals();
+}
+
+function toggleItem(id, domainKey){
+  checked[id] = !checked[id];
+
+  const checkbox = document.getElementById('check-' + id);
+  const card = document.getElementById('card-' + id);
+  checkbox.classList.toggle('checked', checked[id]);
+  card.classList.toggle('settled', checked[id]);
+
+  if(checked[id]){
+    card.style.transform = 'translateX(4px)';
+    setTimeout(()=> card.style.transform = 'translateX(0)', 200);
+  }
+
+  updateDomainIcon(domainKey);
+  updateShelf();
+  checkCompletion();
+}
+
+function updateDomainIcon(domainKey){
+  const domain = domains.find(d=> d.key === domainKey);
+  const allDone = domain.items.every(i=> checked[i.id]);
+  const icon = document.getElementById('domicon-' + domainKey);
+  icon.classList.toggle('complete', allDone);
+  icon.textContent = allDone ? '✓' : '';
+}
+
+function updateAllVisuals(){
+  domains.forEach(d=> updateDomainIcon(d.key));
+  updateShelf();
+}
+
+function updateShelf(){
+  const total = totalItems();
+  const done = checkedCount();
+  const pct = Math.round((done/total)*100);
+
+  document.getElementById('shelf-icon').textContent = pct + '%';
+  document.getElementById('shelf-fill').style.width = pct + '%';
+
+  const label = document.getElementById('shelf-label');
+  if(pct === 0) label.textContent = 'Getting your space ready';
+  else if(pct < 50) label.textContent = 'Settling in';
+  else if(pct < 100) label.textContent = 'Almost set up';
+  else label.textContent = 'Ready for Monday';
+}
+
+function checkCompletion(){
+  const total = totalItems();
+  const done = checkedCount();
+  const card = document.getElementById('completion-card');
+  if(done === total){
+    card.classList.add('show');
+    const dateEl = document.getElementById('completion-date');
+    const now = new Date();
+    dateEl.textContent = now.toLocaleDateString('en-US', { weekday:'long', year:'numeric', month:'long', day:'numeric' });
+    setTimeout(()=> card.scrollIntoView({behavior:'smooth', block:'center'}), 300);
+  } else {
+    card.classList.remove('show');
+  }
+}
+
+renderDomains();
+</script>
+
+</body>
+</html>
