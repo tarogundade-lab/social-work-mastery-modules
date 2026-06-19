@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Risk-Level Triage — Quick Reference</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --red:#A8453E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:760px;
+    margin:0 auto;
+    padding:28px 24px 90px;
+  }
+
+  .tool-header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:8px;
+  }
+  .tool-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .tool-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:25px;
+    margin:0 0 8px;
+  }
+  .tool-sub{
+    font-size:14px;
+    color:var(--warmgray);
+    max-width:540px;
+    line-height:1.5;
+  }
+
+  .disclaimer-strip{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    background:rgba(201,123,74,0.08);
+    border:1px solid rgba(201,123,74,0.25);
+    border-radius:4px;
+    padding:12px 15px;
+    font-size:12.5px;
+    color:var(--clay-deep);
+    line-height:1.5;
+    margin:18px 0 26px;
+  }
+  .disclaimer-strip .icon{font-family:'JetBrains Mono'; font-weight:700; flex-shrink:0;}
+
+  /* ---------- DOMAIN CARDS ---------- */
+  .domain-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    margin-bottom:14px;
+  }
+  .domain-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:4px;
+  }
+  .domain-name{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:16.5px;
+  }
+  .domain-number{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--warmgray);
+  }
+  .domain-prompt{
+    font-size:13px;
+    color:var(--warmgray);
+    margin-bottom:13px;
+    line-height:1.45;
+  }
+
+  .option-row{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .option-btn{
+    text-align:left;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:10px 14px;
+    font-family:'Inter';
+    font-size:13.5px;
+    color:var(--ink);
+    cursor:pointer;
+    transition: border-color 0.12s ease, background 0.12s ease;
+  }
+  .option-btn:hover{ border-color:var(--sage); background:#FFFFFF; }
+  .option-btn.selected{
+    border-color:var(--sage-deep);
+    background:rgba(92,138,134,0.1);
+    font-weight:600;
+  }
+  .option-btn.selected.weight-high{
+    border-color:var(--red);
+    background:rgba(168,69,62,0.08);
+  }
+  .option-btn.selected.weight-med{
+    border-color:var(--clay-deep);
+    background:rgba(201,123,74,0.1);
+  }
+  .option-btn:focus-visible{ outline:2px solid var(--sage-deep); outline-offset:2px; }
+
+  /* ---------- RESULT PANEL ---------- */
+  .result-panel{
+    position:sticky;
+    bottom:0;
+    margin-top:24px;
+    background:var(--ink);
+    color:var(--paper);
+    border-radius:6px;
+    padding:20px 24px;
+    box-shadow:0 -4px 24px rgba(27,42,46,0.25);
+  }
+  .result-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+  }
+  .result-tier-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:#A8B5B3;
+    display:block;
+    margin-bottom:4px;
+  }
+  .result-tier{
+    font-family:'Source Serif 4', serif;
+    font-weight:700;
+    font-size:24px;
+  }
+  .result-tier.tier-low{ color:#8FCBC0; }
+  .result-tier.tier-moderate{ color:#E8B870; }
+  .result-tier.tier-high{ color:#E89186; }
+  .result-tier.tier-incomplete{ color:#A8B5B3; }
+
+  .result-why{
+    font-size:13px;
+    color:#D8D2C2;
+    max-width:380px;
+    line-height:1.5;
+    text-align:right;
+  }
+  @media (max-width:600px){
+    .result-top{ flex-direction:column; align-items:flex-start; }
+    .result-why{ text-align:left; }
+  }
+
+  .result-detail{
+    margin-top:14px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.15);
+    font-size:12.5px;
+    color:#C8C2B2;
+    line-height:1.6;
+  }
+  .result-detail b{ color:#EDE8DC; }
+
+  .reset-link{
+    display:inline-block;
+    margin-top:12px;
+    font-size:12px;
+    color:#A8B5B3;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  .footer-note{
+    font-size:12px;
+    color:var(--warmgray);
+    margin-top:18px;
+    text-align:center;
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="tool-header">
+    <span class="tool-eyebrow">Quick Reference · Risk Triage</span>
+    <h1 class="tool-title">Risk-Level Triage</h1>
+    <p class="tool-sub">A fast way to organize your thinking across the domains that matter most, when you need a starting read in the moment.</p>
+  </div>
+
+  <div class="disclaimer-strip">
+    <span class="icon">!</span>
+    <span>This tool gives you a starting tier to organize your thinking — it is not a determination, and it does not replace clinical judgment, supervision, or your agency's protocol. Use it to make sure you've checked the right domains, not to skip checking them yourself.</span>
+  </div>
+
+  <div id="domains-container"></div>
+
+  <div class="result-panel" id="result-panel">
+    <div class="result-top">
+      <div>
+        <span class="result-tier-label">Starting tier</span>
+        <span class="result-tier tier-incomplete" id="result-tier-text">Answer the domains below</span>
+      </div>
+      <div class="result-why" id="result-why">Each domain you answer sharpens this read.</div>
+    </div>
+    <div class="result-detail hidden" id="result-detail"></div>
+    <span class="reset-link" id="reset-link">Reset all answers</span>
+  </div>
+
+  <p class="footer-note">If you're ever genuinely unsure, treat it as higher risk and consult your supervisor — the cost of over-checking is almost always lower than the cost of under-checking.</p>
+
+</div>
+
+<script>
+/* ============================================================
+   DOMAIN DEFINITIONS
+   Each option carries a weight: 0 (low), 1 (moderate), 2 (high)
+   Tier is derived from the sum + a couple of override rules,
+   not a rigid formula presented as precise math.
+   ============================================================ */
+const domains = [
+  {
+    key:'immediacy',
+    name:'Immediacy',
+    prompt:'How soon could harm occur, based on what you know right now?',
+    options:[
+      {label:'No indication of imminent harm', weight:0},
+      {label:'Some urgency, but not in the next few hours', weight:1},
+      {label:'Could happen today, or already may be unfolding', weight:2}
+    ]
+  },
+  {
+    key:'specificity',
+    name:'Specificity of plan or threat',
+    prompt:'How concrete is the plan, method, or threat — if one exists?',
+    options:[
+      {label:'No plan or threat present', weight:0},
+      {label:'Vague or general concern, no specific method/target', weight:1},
+      {label:'Specific method, target, or timeline named', weight:2}
+    ]
+  },
+  {
+    key:'means',
+    name:'Access to means',
+    prompt:'Does the person have access to whatever would be needed to act?',
+    options:[
+      {label:'No known access, or means clearly unavailable', weight:0},
+      {label:'Unclear or partial access', weight:1},
+      {label:'Confirmed access right now', weight:2}
+    ]
+  },
+  {
+    key:'history',
+    name:'History',
+    prompt:'Is there a relevant prior history (attempts, incidents, escalation pattern)?',
+    options:[
+      {label:'No known relevant history', weight:0},
+      {label:'Some history, but stable or long past', weight:1},
+      {label:'Recent or escalating history', weight:2}
+    ]
+  },
+  {
+    key:'protective',
+    name:'Protective factors',
+    prompt:'What support, insight, or stabilizing factors are present right now?',
+    options:[
+      {label:'Strong, accessible support and insight present', weight:0},
+      {label:'Some protective factors, but inconsistent', weight:1},
+      {label:'Few or no protective factors currently accessible', weight:2}
+    ]
+  },
+  {
+    key:'capacity',
+    name:'Capacity in the moment',
+    prompt:'Is the person\'s judgment currently affected by intoxication, acute distress, or crisis state?',
+    options:[
+      {label:'Judgment appears intact', weight:0},
+      {label:'Some impairment or acute distress', weight:1},
+      {label:'Significant impairment — intoxicated, dissociated, or in acute crisis', weight:2}
+    ]
+  }
+];
+
+let answers = {}; // key -> weight
+
+const container = document.getElementById('domains-container');
+
+function renderDomains(){
+  container.innerHTML = domains.map((d, idx) => `
+    <div class="domain-card">
+      <div class="domain-head">
+        <span class="domain-name">${d.name}</span>
+        <span class="domain-number">${String(idx+1).padStart(2,'0')} / ${String(domains.length).padStart(2,'0')}</span>
+      </div>
+      <div class="domain-prompt">${d.prompt}</div>
+      <div class="option-row" id="options-${d.key}">
+        ${d.options.map((opt, oi) => `
+          <button class="option-btn" data-key="${d.key}" data-weight="${opt.weight}" data-idx="${oi}">
+            ${opt.label}
+          </button>
+        `).join('')}
+      </div>
+    </div>
+  `).join('');
+
+  domains.forEach(d=>{
+    const buttons = document.querySelectorAll(`#options-${d.key} .option-btn`);
+    buttons.forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const weight = parseInt(btn.dataset.weight);
+        answers[d.key] = weight;
+        buttons.forEach(b=> b.classList.remove('selected','weight-high','weight-med'));
+        btn.classList.add('selected');
+        if(weight === 2) btn.classList.add('weight-high');
+        if(weight === 1) btn.classList.add('weight-med');
+        updateResult();
+      });
+    });
+  });
+}
+
+function updateResult(){
+  const answeredKeys = Object.keys(answers);
+  const tierText = document.getElementById('result-tier-text');
+  const whyText = document.getElementById('result-why');
+  const detailEl = document.getElementById('result-detail');
+
+  if(answeredKeys.length === 0){
+    tierText.textContent = 'Answer the domains below';
+    tierText.className = 'result-tier tier-incomplete';
+    whyText.textContent = 'Each domain you answer sharpens this read.';
+    detailEl.classList.add('hidden');
+    return;
+  }
+
+  const sum = Object.values(answers).reduce((a,b)=> a+b, 0);
+  const maxPossible = domains.length * 2;
+  const answeredCount = answeredKeys.length;
+  const avgWeight = sum / answeredCount;
+
+  // override rules: certain high-weight combinations push tier up regardless of average
+  const hasImmediacyHigh = answers['immediacy'] === 2;
+  const hasSpecificityHigh = answers['specificity'] === 2;
+  const hasMeansHigh = answers['means'] === 2;
+  const criticalCombo = hasImmediacyHigh && (hasSpecificityHigh || hasMeansHigh);
+
+  let tier, tierClass, why;
+
+  if(criticalCombo){
+    tier = 'High';
+    tierClass = 'tier-high';
+    why = 'Immediate timeframe combined with a specific plan or confirmed access to means — this combination alone warrants urgent action regardless of other factors.';
+  } else if(avgWeight >= 1.4){
+    tier = 'High';
+    tierClass = 'tier-high';
+    why = 'Multiple domains are showing elevated concern at once.';
+  } else if(avgWeight >= 0.7){
+    tier = 'Moderate';
+    tierClass = 'tier-moderate';
+    why = 'A mix of some concerning and some reassuring factors — worth a closer look before deciding next steps.';
+  } else {
+    tier = 'Low';
+    tierClass = 'tier-low';
+    why = 'Most domains checked so far are reassuring, based on what you\'ve indicated.';
+  }
+
+  if(answeredCount < domains.length){
+    why += ` (${answeredCount} of ${domains.length} domains answered — this read will sharpen as you finish.)`;
+  }
+
+  tierText.textContent = tier;
+  tierText.className = 'result-tier ' + tierClass;
+  whyText.textContent = why;
+
+  // detail breakdown
+  const concerning = domains.filter(d => answers[d.key] === 2);
+  const moderate = domains.filter(d => answers[d.key] === 1);
+
+  let detailHtml = '';
+  if(concerning.length){
+    detailHtml += `<b>Highest concern:</b> ${concerning.map(d=>d.name).join(', ')}. `;
+  }
+  if(moderate.length){
+    detailHtml += `<b>Worth watching:</b> ${moderate.map(d=>d.name).join(', ')}. `;
+  }
+  if(!concerning.length && !moderate.length){
+    detailHtml += 'No domains currently flagged as elevated.';
+  }
+  detailHtml += ' Remember: this tier is a starting point for your own judgment and any required consultation — not a replacement for either.';
+
+  detailEl.innerHTML = detailHtml;
+  detailEl.classList.remove('hidden');
+}
+
+document.getElementById('reset-link').addEventListener('click', ()=>{
+  answers = {};
+  renderDomains();
+  updateResult();
+});
+
+renderDomains();
+updateResult();
+</script>
+
+</body>
+</html>
