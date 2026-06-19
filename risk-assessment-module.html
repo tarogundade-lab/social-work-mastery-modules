@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Case File: Initial Risk Assessment</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+
+  .app{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 28px 24px 80px;
+  }
+
+  /* ---------- HEADER / CASE FILE TAB ---------- */
+  .case-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:flex-end;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom:14px;
+    margin-bottom: 22px;
+    flex-wrap:wrap;
+    gap:12px;
+  }
+  .case-header .left{display:flex; align-items:baseline; gap:14px; flex-wrap:wrap;}
+  .case-id{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--warmgray);
+    letter-spacing:0.04em;
+  }
+  .case-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size: 26px;
+    margin:0;
+  }
+  .case-meta{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--warmgray);
+    text-align:right;
+  }
+
+  /* ---------- LAYOUT ---------- */
+  .layout{
+    display:grid;
+    grid-template-columns: 1fr 300px;
+    gap:28px;
+    align-items:start;
+  }
+  @media (max-width: 880px){
+    .layout{grid-template-columns: 1fr;}
+  }
+
+  /* ---------- MAIN CASE PANEL ---------- */
+  .panel{
+    background: var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:3px;
+    box-shadow: var(--shadow);
+    padding: 30px 34px;
+    margin-bottom:22px;
+    position:relative;
+  }
+  .panel::before{
+    content:"";
+    position:absolute;
+    left:0; top:24px; bottom:24px;
+    width:3px;
+    background: var(--sage);
+    border-radius:0 2px 2px 0;
+  }
+
+  .stamp{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.08em;
+    text-transform:uppercase;
+    color: var(--sage-deep);
+    background: rgba(92,138,134,0.1);
+    border:1px solid rgba(92,138,134,0.3);
+    padding:4px 10px;
+    border-radius:20px;
+    margin-bottom:16px;
+  }
+  .stamp.alert{
+    color: var(--clay-deep);
+    background: rgba(201,123,74,0.1);
+    border-color: rgba(201,123,74,0.3);
+  }
+
+  /* ---------- SCENE ILLUSTRATION ---------- */
+  .scene-art{
+    width:100%;
+    aspect-ratio: 16/7;
+    border-radius:4px;
+    overflow:hidden;
+    margin-bottom:20px;
+    background: linear-gradient(180deg, #20343A 0%, #16242A 100%);
+    position:relative;
+  }
+  .scene-art svg{
+    width:100%;
+    height:100%;
+    display:block;
+  }
+  .scene-art-caption{
+    position:absolute;
+    bottom:0; left:0; right:0;
+    padding:10px 16px 9px;
+    background: linear-gradient(180deg, transparent, rgba(0,0,0,0.45));
+    font-family:'Inter', sans-serif;
+    font-size:11.5px;
+    letter-spacing:0.02em;
+    color:#EDE8DC;
+    font-style:italic;
+  }
+
+  .scene-text{
+    font-family:'Source Serif 4', serif;
+    font-size:18px;
+    line-height:1.65;
+    color: var(--ink);
+  }
+  .scene-text p{margin:0 0 14px;}
+  .scene-text .speaker{
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:12.5px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--warmgray);
+    display:block;
+    margin-bottom:4px;
+  }
+  .quote-line{
+    margin: 0 0 18px;
+    padding-left:16px;
+    border-left: 2px solid var(--line);
+  }
+
+  .field-note{
+    margin-top: 18px;
+    font-family:'Inter', sans-serif;
+    font-size:13.5px;
+    color: var(--warmgray);
+    background: #FBFAF6;
+    border:1px dashed var(--line);
+    border-radius:4px;
+    padding:12px 14px;
+  }
+  .field-note b{color:var(--ink); font-weight:600;}
+
+  /* ---------- DECISION CHOICES ---------- */
+  .decision-prompt{
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:13px;
+    letter-spacing:0.01em;
+    color:var(--warmgray);
+    margin: 26px 0 13px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .decision-prompt::before{
+    content:"";
+    width:14px; height:1px;
+    background:var(--clay);
+    display:inline-block;
+  }
+
+  .choices{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+  }
+  .choice-btn{
+    text-align:left;
+    background: var(--paper-raised);
+    border:1px solid var(--line);
+    border-left: 3px solid var(--line);
+    border-radius:2px 8px 8px 2px;
+    padding:15px 18px;
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    font-style:italic;
+    color:var(--ink);
+    cursor:pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, padding-left 0.15s ease;
+    display:flex;
+    align-items:flex-start;
+    gap:13px;
+    line-height:1.5;
+    width:100%;
+    box-shadow: 0 1px 3px rgba(27,42,46,0.04);
+  }
+  .choice-btn:hover{
+    border-left-color: var(--sage);
+    background: #FFFFFF;
+    padding-left:22px;
+  }
+  .choice-btn:focus-visible{
+    outline: 2px solid var(--sage-deep);
+    outline-offset:2px;
+  }
+  .choice-letter{
+    font-family:'Inter', sans-serif;
+    font-style:normal;
+    font-size:10.5px;
+    font-weight:700;
+    letter-spacing:0.04em;
+    color: var(--warmgray);
+    flex-shrink:0;
+    margin-top:4px;
+  }
+  .choice-btn .choice-letter::after{ content:'.'; }
+
+  /* ---------- FEEDBACK STATE ---------- */
+  .feedback{
+    margin-top:18px;
+    border-radius:4px;
+    padding:16px 18px;
+    font-size:14.5px;
+    line-height:1.6;
+    animation: fadeIn 0.35s ease;
+    border-left:3px solid var(--sage);
+    background: rgba(92,138,134,0.07);
+  }
+  .feedback.caution{
+    border-left-color: var(--clay);
+    background: rgba(201,123,74,0.08);
+  }
+  .feedback .fb-label{
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size:11.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+    color: var(--sage-deep);
+  }
+  .feedback.caution .fb-label{ color: var(--clay-deep); }
+
+  .continue-btn{
+    margin-top:18px;
+    background: var(--ink);
+    color: var(--paper);
+    border:none;
+    border-radius:4px;
+    padding:11px 22px;
+    font-family:'Inter', sans-serif;
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+    transition: opacity 0.15s ease;
+  }
+  .continue-btn:hover{opacity:0.85;}
+  .continue-btn:focus-visible{outline:2px solid var(--sage); outline-offset:2px;}
+
+  @keyframes fadeIn{
+    from{opacity:0; transform:translateY(4px);}
+    to{opacity:1; transform:translateY(0);}
+  }
+
+  /* ---------- SIDEBAR: RISK FORMULATION ---------- */
+  .sidebar{
+    position:sticky;
+    top:20px;
+    display:flex;
+    flex-direction:column;
+    gap:16px;
+  }
+  .sidebar-panel{
+    background: var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:3px;
+    box-shadow: var(--shadow);
+    padding:20px 20px 18px;
+  }
+  .sidebar-title{
+    font-family:'Inter', sans-serif;
+    font-weight:700;
+    font-size:11.5px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--warmgray);
+    margin:0 0 14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+  }
+
+  .progress-track{
+    height:5px;
+    background:var(--line);
+    border-radius:3px;
+    overflow:hidden;
+    margin-bottom:4px;
+  }
+  .progress-fill{
+    height:100%;
+    background: var(--sage);
+    border-radius:3px;
+    transition: width 0.5s ease;
+    width:0%;
+  }
+  .progress-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--warmgray);
+  }
+
+  .indicator-list{
+    list-style:none;
+    margin:16px 0 0;
+    padding:0;
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+  }
+  .indicator-item{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:13px;
+    color: var(--line);
+    transition: color 0.3s ease;
+  }
+  .indicator-item.filled{ color: var(--ink); }
+  .indicator-dot{
+    width:7px; height:7px;
+    border-radius:50%;
+    background: var(--line);
+    margin-top:5px;
+    flex-shrink:0;
+    transition: background 0.3s ease;
+  }
+  .indicator-item.filled .indicator-dot{ background: var(--sage); }
+  .indicator-item.filled.risk .indicator-dot{ background: var(--clay); }
+  .indicator-text{line-height:1.4;}
+  .indicator-item:not(.filled) .indicator-text{
+    font-style:italic;
+    color: var(--line);
+  }
+
+  .formulation-box{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    color:var(--ink);
+    background:#FBFAF6;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 13px;
+    margin-top:14px;
+    line-height:1.55;
+    min-height:50px;
+  }
+  .formulation-box .empty{color:var(--line); font-style:italic;}
+
+  .module-nav{
+    display:flex;
+    gap:6px;
+    flex-wrap:wrap;
+    margin-top:2px;
+  }
+  .nav-dot{
+    flex:1;
+    min-width:18px;
+    height:5px;
+    background: var(--line);
+    border-radius:3px;
+  }
+  .nav-dot.done{ background: var(--sage-deep); }
+  .nav-dot.current{ background: var(--clay); }
+
+  /* ---------- DEBRIEF / SUMMARY SCREEN ---------- */
+  .debrief{
+    text-align:left;
+  }
+  .debrief h2{
+    font-family:'Source Serif 4', serif;
+    font-size:24px;
+    margin:0 0 6px;
+  }
+  .debrief .sub{
+    color:var(--warmgray);
+    font-size:14px;
+    margin-bottom:24px;
+  }
+  .summary-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap:14px;
+    margin:20px 0;
+  }
+  @media (max-width:600px){.summary-grid{grid-template-columns:1fr;}}
+  .summary-card{
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:14px 16px;
+    background:#FBFAF6;
+  }
+  .summary-card .k{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    margin-bottom:6px;
+    display:block;
+  }
+  .summary-card .v{font-size:14px; line-height:1.5;}
+
+  .restart-btn{
+    margin-top:10px;
+    background: transparent;
+    color: var(--ink);
+    border:1px solid var(--ink);
+    border-radius:4px;
+    padding:10px 20px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+  .restart-btn:hover{ background: var(--ink); color: var(--paper); }
+
+  .hidden{display:none !important;}
+
+  /* reduced motion */
+  @media (prefers-reduced-motion: reduce){
+    .feedback{animation:none;}
+    .choice-btn, .progress-fill, .indicator-item, .indicator-dot{transition:none;}
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="case-header">
+    <div class="left">
+      <span class="case-id">CASE FILE NO. 0417-RA</span>
+      <h1 class="case-title">Initial Risk Assessment — Phone Intake</h1>
+    </div>
+    <div class="case-meta">MODULE 4 OF 9<br>SCENARIO-BASED · ~12 MIN</div>
+  </div>
+
+  <div class="layout">
+
+    <!-- MAIN STORY COLUMN -->
+    <div class="main-col">
+      <div id="scene-panel" class="panel"></div>
+    </div>
+
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+      <div class="sidebar-panel">
+        <div class="sidebar-title">Your progress</div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="progress-label" id="progress-label">Step 0 of 6</div>
+        <div class="module-nav" id="module-nav"></div>
+      </div>
+
+      <div class="sidebar-panel">
+        <div class="sidebar-title">Risk formulation <span style="font-size:10px; color:var(--line);">(builds as you go)</span></div>
+        <ul class="indicator-list" id="indicator-list"></ul>
+        <div class="formulation-box" id="formulation-box">
+          <span class="empty">Your working formulation will appear here as you gather information.</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   CASE DATA
+   A branching risk-assessment scenario. Each step has narrative
+   text, optional speaker quote, a decision prompt, and choices.
+   Choices carry consequences (feedback), risk indicator flags,
+   and a pointer to the next step.
+   ============================================================ */
+
+const indicatorDefs = [
+  {key:'rapport', label:'Established rapport before assessing risk'},
+  {key:'access', label:'Assessed access to lethal means'},
+  {key:'plan', label:'Explored specificity of plan/intent'},
+  {key:'protective', label:'Identified protective factors'},
+  {key:'collateral', label:'Considered collateral contacts / supports'},
+  {key:'disposition', label:'Reached a safety disposition'}
+];
+
+const steps = {
+
+  start: {
+    scene: 'night-call',
+    caption: 'Maren, on the phone, 9:40pm',
+    stamp: {text:'INTAKE LINE · INCOMING CALL', alert:false},
+    text: `
+      <span class="speaker">Dispatch note</span>
+      <p>It's 9:40pm. The crisis line transfers a call to you. The caller is <b>Maren, 34</b>, who says her sister <b>Joy, 29</b>, just texted her: <i>"I don't think I can do this anymore. Don't try to find me."</i> Maren is on the line now, audibly shaken, asking what she should do.</p>
+    `,
+    note: `You have no history on Joy in your system. Maren is your only source of information right now.`,
+    prompt: 'How do you open the call?',
+    choices: [
+      {
+        letter:'A',
+        text:'"Okay, I need you to tell me everything you know right now — where is she, does she have access to anything she could hurt herself with?"',
+        next:'rapport_rushed',
+        flag:null
+      },
+      {
+        letter:'B',
+        text:'"I\'m glad you called. I\'m here with you. Can you tell me what\'s going on, in your own time?"',
+        next:'rapport_good',
+        flag:'rapport'
+      },
+      {
+        letter:'C',
+        text:'"Has she done this before? Has she ever attempted before?"',
+        next:'rapport_clinical',
+        flag:null
+      }
+    ]
+  },
+
+  rapport_rushed: {
+    scene: 'night-call-tense',
+    caption: 'Maren\'s breathing quickens',
+    stamp:{text:'CALLER STATE: RATTLED', alert:true},
+    feedback:{
+      type:'caution',
+      label:'Field supervisor note',
+      text:`Leading with rapid-fire questions is a common first-call instinct — it feels efficient — but it can spike a panicked caller's anxiety further and make her feel interrogated rather than supported. Maren answers, but her speech speeds up and becomes harder to follow.`
+    },
+    text:`
+      <span class="speaker">Maren, talking fast</span>
+      <p class="quote-line">"I don't — I don't know, she's not answering now, she could be anywhere, she has her car, oh god, should I be driving around looking for her—"</p>
+    `,
+    note:`You've gotten urgency but not yet anything you can act on. You'll need to slow the pace down to get usable information.`,
+    prompt:'Continue.',
+    choices:[
+      {letter:'→', text:'Slow the call down and re-anchor.', next:'mid_anchor', flag:null}
+    ]
+  },
+
+  rapport_clinical: {
+    scene: 'night-call-tense',
+    caption: 'A pause on the line',
+    stamp:{text:'CALLER STATE: COOPERATIVE BUT GUARDED', alert:false},
+    feedback:{
+      type:'caution',
+      label:'Field supervisor note',
+      text:`History of prior attempts is genuinely important data — but asked first, before any rapport, it can land as cold or clinical to a frightened family member, and may make her more guarded about what she shares next.`
+    },
+    text:`
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"I — I don't know. Maybe once, in college? I don't know if that's even true, that was years ago. Why does that matter right now?"</p>
+    `,
+    note:`She's not shutting down, but there's a new edge of defensiveness. Worth repairing before going further.`,
+    prompt:'Continue.',
+    choices:[
+      {letter:'→', text:'Acknowledge and re-anchor with care.', next:'mid_anchor', flag:null}
+    ]
+  },
+
+  rapport_good: {
+    scene: 'night-call-calmer',
+    caption: 'Maren steadies, begins to explain',
+    stamp:{text:'CALLER STATE: SHAKEN BUT ENGAGED', alert:false},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Leading with presence before information-gathering is exactly right in a high-arousal moment. It costs you a little time up front and buys you a caller who can actually think clearly enough to give you useful information.`
+    },
+    text:`
+      <span class="speaker">Maren, voice unsteady</span>
+      <p class="quote-line">"Okay. Okay, thank you. She's been really withdrawn the last few weeks — lost her job in March, stopped answering our group chat. Tonight she texted me that, and then nothing."</p>
+    `,
+    note:`You now have a timeline (job loss, withdrawal) and a precipitant (the text). Time to gather risk-specific information.`,
+    prompt:'What do you ask next?',
+    choices:[
+      {
+        letter:'A',
+        text:'"Does Joy have access to a firearm, medications, or anything else she could use to hurt herself?"',
+        next:'access_direct',
+        flag:'access'
+      },
+      {
+        letter:'B',
+        text:'"Is there anyone who might be with her right now, or who she\'d reach out to?"',
+        next:'collateral_first',
+        flag:'collateral'
+      }
+    ]
+  },
+
+  mid_anchor: {
+    scene: 'night-call-calmer',
+    caption: 'A breath, then steadier words',
+    stamp:{text:'CALLER STATE: REGAINING FOOTING', alert:false},
+    text:`
+      <span class="speaker">You</span>
+      <p class="quote-line">"You're doing the right thing calling. Let's slow down for one second — I'm not going anywhere. Take a breath with me, and then tell me what happened tonight."</p>
+      <span class="speaker">Maren, slower now</span>
+      <p class="quote-line">"...Okay. Sorry. She's been really withdrawn since she lost her job in March. Tonight she sent that text and then went quiet."</p>
+    `,
+    note:`Re-anchoring worked — you now have a timeline and precipitant. Continue gathering risk information.`,
+    prompt:'What do you ask next?',
+    choices:[
+      {
+        letter:'A',
+        text:'"Does Joy have access to a firearm, medications, or anything else she could use to hurt herself?"',
+        next:'access_direct',
+        flag:'access'
+      },
+      {
+        letter:'B',
+        text:'"Is there anyone who might be with her right now, or who she\'d reach out to?"',
+        next:'collateral_first',
+        flag:'collateral'
+      }
+    ]
+  },
+
+  access_direct: {
+    scene: 'house-window',
+    caption: 'Joy\'s apartment, lights on, somewhere across town',
+    stamp:{text:'RISK INDICATOR: MEANS', alert:true},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Directly and plainly asking about access to lethal means is one of the single highest-value questions in a risk assessment — it's not leading or suggestive, it's necessary. Asking it doesn't "put the idea in anyone's head"; that's a myth. Maren can answer it.`
+    },
+    text:`
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"There's no gun in the house, I know that much. But she's on antidepressants — there could be a full bottle, I don't know how much she has left."</p>
+    `,
+    note:`Means: partial picture. No firearm, possible medication on hand, quantity unknown. Worth flagging for next steps but not yet definitive.`,
+    prompt:'What do you explore next?',
+    choices:[
+      {
+        letter:'A',
+        text:'Ask whether Joy said or did anything that suggests a specific plan or timeline.',
+        next:'plan_explore',
+        flag:'plan'
+      },
+      {
+        letter:'B',
+        text:'Ask about people or things that matter to Joy — anything that might be a protective pull.',
+        next:'protective_explore',
+        flag:'protective'
+      }
+    ]
+  },
+
+  collateral_first: {
+    scene: 'two-phones',
+    caption: 'A second thread opens — the roommate',
+    stamp:{text:'RISK INDICATOR: SUPPORT NETWORK', alert:false},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Identifying who else might be reachable is valuable — it can open a faster path to physically checking on Joy. Just keep in mind means and plan still need direct attention; this doesn't replace them, it runs alongside them.`
+    },
+    text:`
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"Her roommate, maybe? They're not super close but they live together. I have her number actually."</p>
+    `,
+    note:`A potential collateral contact identified. Means and plan are still unassessed — circle back.`,
+    prompt:'What do you ask next?',
+    choices:[
+      {
+        letter:'A',
+        text:'"Does Joy have access to a firearm, medications, or anything else she could use to hurt herself?"',
+        next:'access_direct',
+        flag:'access'
+      },
+      {
+        letter:'B',
+        text:'Ask whether Joy said or did anything suggesting a specific plan or timeline.',
+        next:'plan_explore',
+        flag:'plan'
+      }
+    ]
+  },
+
+  plan_explore: {
+    scene: 'house-window-dark',
+    caption: 'Don\'t try to find me.',
+    stamp:{text:'RISK INDICATOR: INTENT & SPECIFICITY', alert:true},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Specificity (a particular method, time, or location) generally indicates higher acute risk than vague ideation. This is one of the most decision-relevant pieces of information you can gather on this call.`
+    },
+    text:`
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"She said 'don't try to find me' — that's what scares me. Like she's already somewhere. She didn't say where. She's done this before, gone quiet for a day or two when things were bad, but never said something like that."</p>
+    `,
+    note:`No specific method or location named, but "don't try to find me" plus a prior pattern of withdrawal raises acuity. This is no longer a low-urgency call.`,
+    prompt:'What do you explore next?',
+    choices:[
+      {
+        letter:'A',
+        text:'Ask about protective factors — people, plans, or things Joy has expressed wanting to stay for.',
+        next:'protective_explore',
+        flag:'protective'
+      },
+      {
+        letter:'B',
+        text:'Move to disposition now — decide on next steps given what you have.',
+        next:'disposition_early',
+        flag:null
+      }
+    ]
+  },
+
+  protective_explore: {
+    scene: 'dog-warmth',
+    caption: 'What still anchors her',
+    stamp:{text:'RISK INDICATOR: PROTECTIVE FACTORS', alert:false},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Protective factors aren't a counterweight that cancels out risk — they're context that shapes the safety plan. A strong protective factor can change what intervention looks like, but it doesn't lower urgency on its own.`
+    },
+    text:`
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"She loves her dog more than anything — wouldn't just leave him. And she's close with our mom, calls her most days. I don't think she'd want to hurt mom by doing this."</p>
+    `,
+    note:`Protective factors identified: attachment to a pet, close relationship with mother. Real, but not sufficient alone to resolve the acute concern.</p>`,
+    prompt:'You now have a fuller picture. What\'s your disposition?',
+    choices:[
+      {
+        letter:'A',
+        text:'Advise Maren to call 911 for a welfare check immediately, given the access and intent uncertainty.',
+        next:'disposition_911',
+        flag:'disposition'
+      },
+      {
+        letter:'B',
+        text:'Coach Maren through immediate next steps (contacting the roommate, trying Joy again) while you stay on the line, holding 911 as the next step if those fail.',
+        next:'disposition_staged',
+        flag:'disposition'
+      }
+    ]
+  },
+
+  disposition_early: {
+    scene: 'crossroads',
+    caption: 'The decision point',
+    stamp:{text:'DECISION POINT', alert:true},
+    feedback:{
+      type:'caution',
+      label:'Field supervisor note',
+      text:`Moving to disposition is reasonable given the acuity — but you skipped protective factors, which would have told you whether there's a fast, low-friction route to reach Joy (like the mother she calls daily). That gap may cost you time in the next step.`
+    },
+    text:`
+      <span class="speaker">You're deciding without protective factor information.</span>
+      <p>You have: withdrawal, job loss, a worrying text, ambiguous means, no specific plan but a request not to be found.</p>
+    `,
+    note:`This is workable, but incomplete. Decide your disposition.`,
+    prompt:'What\'s your disposition?',
+    choices:[
+      {
+        letter:'A',
+        text:'Advise Maren to call 911 for a welfare check immediately.',
+        next:'disposition_911',
+        flag:'disposition'
+      },
+      {
+        letter:'B',
+        text:'Coach Maren through trying the roommate and Joy again first, holding 911 in reserve.',
+        next:'disposition_staged',
+        flag:'disposition'
+      }
+    ]
+  },
+
+  disposition_911: {
+    scene: 'flashing-lights',
+    caption: 'Help is on the way',
+    stamp:{text:'DISPOSITION: IMMEDIATE WELFARE CHECK', alert:true},
+    feedback:{
+      type:'good',
+      label:'Field supervisor note',
+      text:`Given a goodbye-adjacent message, an explicit request not to be found, and unresolved access to medication, defaulting to an immediate welfare check is a defensible — often the correct — call. When in doubt with this combination of indicators, erring toward a faster safety response is appropriate.`
+    },
+    text:`
+      <span class="speaker">You</span>
+      <p class="quote-line">"Maren, I think the safest thing right now is for you to call 911 and request a welfare check at her address. I can stay on the line with you while you do that, or call them now while you keep trying to reach her."</p>
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"Okay — okay, I'll call them right now."</p>
+    `,
+    note:`End of scenario. See your full risk formulation in the sidebar.`,
+    final:true
+  },
+
+  disposition_staged: {
+    scene: 'two-phones-dawn',
+    caption: 'Holding the line, together',
+    stamp:{text:'DISPOSITION: STAGED RESPONSE', alert:false},
+    feedback:{
+      type:'caution',
+      label:'Field supervisor note',
+      text:`A staged response can be appropriate when risk is more ambiguous and there's a fast, trusted contact available — but here, the combination of a goodbye-adjacent message and uncertain access to medication makes a delay riskier. This is a defensible judgment call, not a wrong answer, but most supervisors would push toward 911 sooner given what's on the table.`
+    },
+    text:`
+      <span class="speaker">You</span>
+      <p class="quote-line">"Let's try two things at once — can you call the roommate right now, and also try texting Joy again? I'll stay on the line. If we don't hear back in the next few minutes, we call 911 together."</p>
+      <span class="speaker">Maren</span>
+      <p class="quote-line">"Okay — trying the roommate now."</p>
+    `,
+    note:`End of scenario. See your full risk formulation in the sidebar.`,
+    final:true
+  }
+};
+
+/* ============================================================
+   SCENE ILLUSTRATIONS
+   Soft, painterly SVG scenes — set mood without depicting an
+   identifiable individual. Built from the design palette.
+   ============================================================ */
+function sceneSVG(key){
+  const scenes = {
+
+    'night-call': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g1" cx="30%" cy="40%" r="70%">
+            <stop offset="0%" stop-color="#2C4248"/>
+            <stop offset="100%" stop-color="#13201F"/>
+          </radialGradient>
+          <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C97B4A" stop-opacity="0.55"/>
+            <stop offset="100%" stop-color="#C97B4A" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#g1)"/>
+        <!-- distant window grid -->
+        <g opacity="0.18">
+          <rect x="600" y="40" width="160" height="220" fill="#5C8A86"/>
+          <rect x="610" y="55" width="20" height="26" fill="#13201F"/>
+          <rect x="645" y="55" width="20" height="26" fill="#13201F"/>
+          <rect x="680" y="55" width="20" height="26" fill="#13201F"/>
+          <rect x="610" y="95" width="20" height="26" fill="#13201F"/>
+          <rect x="645" y="95" width="20" height="26" fill="#F4D8A8" opacity="0.6"/>
+          <rect x="680" y="95" width="20" height="26" fill="#13201F"/>
+        </g>
+        <!-- figure silhouette, seated, phone to ear -->
+        <g transform="translate(180,150)">
+          <ellipse cx="60" cy="195" rx="95" ry="14" fill="#000" opacity="0.25"/>
+          <path d="M10 195 Q5 110 55 80 Q60 40 95 40 Q130 40 132 78 Q170 100 165 195 Z" fill="#1B2A2E"/>
+          <circle cx="95" cy="55" r="32" fill="#23363B"/>
+          <path d="M120 60 q14 6 12 24 q-2 14 -16 14" fill="none" stroke="#23363B" stroke-width="9" stroke-linecap="round"/>
+        </g>
+        <circle cx="295" cy="95" r="70" fill="url(#glow1)"/>
+        <text x="400" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#8B8478" letter-spacing="2">9:40 PM &#8212; LINE CONNECTED</text>
+      </svg>`,
+
+    'night-call-tense': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g2" cx="50%" cy="30%" r="80%">
+            <stop offset="0%" stop-color="#3A2A22"/>
+            <stop offset="100%" stop-color="#15201F"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#g2)"/>
+        <g transform="translate(280,140)" opacity="0.95">
+          <ellipse cx="60" cy="190" rx="100" ry="14" fill="#000" opacity="0.3"/>
+          <path d="M5 190 Q0 95 60 70 Q66 32 100 32 Q136 32 138 70 Q178 92 172 190 Z" fill="#221A16"/>
+          <circle cx="100" cy="48" r="33" fill="#2C2018"/>
+          <path d="M126 52 q16 8 13 26 q-3 15 -18 15" fill="none" stroke="#2C2018" stroke-width="9" stroke-linecap="round"/>
+        </g>
+        <g opacity="0.5">
+          <path d="M120 60 q10 -20 4 -40" stroke="#C97B4A" stroke-width="2" fill="none"/>
+          <path d="M650 80 q-10 -18 -2 -38" stroke="#C97B4A" stroke-width="2" fill="none"/>
+        </g>
+        <text x="400" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#C97B4A" letter-spacing="2">VOICE QUICKENING</text>
+      </svg>`,
+
+    'night-call-calmer': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="g3" cx="35%" cy="35%" r="75%">
+            <stop offset="0%" stop-color="#2D454A"/>
+            <stop offset="100%" stop-color="#14201F"/>
+          </radialGradient>
+          <radialGradient id="glow3" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#7FAFA9" stop-opacity="0.4"/>
+            <stop offset="100%" stop-color="#7FAFA9" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#g3)"/>
+        <circle cx="260" cy="120" r="90" fill="url(#glow3)"/>
+        <g transform="translate(200,140)">
+          <ellipse cx="60" cy="190" rx="98" ry="14" fill="#000" opacity="0.22"/>
+          <path d="M8 190 Q3 100 58 75 Q63 36 97 36 Q133 36 135 74 Q173 96 168 190 Z" fill="#1E3034"/>
+          <circle cx="97" cy="52" r="32" fill="#26393E"/>
+          <path d="M122 56 q14 7 12 24 q-2 14 -16 14" fill="none" stroke="#26393E" stroke-width="9" stroke-linecap="round"/>
+        </g>
+        <text x="400" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#7FAFA9" letter-spacing="2">A SLOWER BREATH</text>
+      </svg>`,
+
+    'house-window': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#10191B"/>
+            <stop offset="100%" stop-color="#26393E"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#sky1)"/>
+        <rect x="0" y="230" width="800" height="120" fill="#0E1718"/>
+        <g>
+          <rect x="320" y="80" width="160" height="170" fill="#1B2A2E"/>
+          <rect x="345" y="100" width="40" height="50" fill="#F4D8A8" opacity="0.75"/>
+          <rect x="415" y="100" width="40" height="50" fill="#26393E"/>
+          <rect x="345" y="170" width="110" height="50" fill="#26393E"/>
+          <rect x="320" y="80" width="160" height="170" fill="none" stroke="#0E1718" stroke-width="4"/>
+        </g>
+        <circle cx="650" cy="60" r="22" fill="#EDE8DC" opacity="0.85"/>
+        <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#8B8478" letter-spacing="2">ONE LIGHT STILL ON</text>
+      </svg>`,
+
+    'house-window-dark': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#0D1416"/>
+            <stop offset="100%" stop-color="#1E2E32"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#sky2)"/>
+        <rect x="0" y="230" width="800" height="120" fill="#0A1112"/>
+        <g>
+          <rect x="320" y="80" width="160" height="170" fill="#171F22"/>
+          <rect x="345" y="100" width="40" height="50" fill="#2A3A3E"/>
+          <rect x="415" y="100" width="40" height="50" fill="#2A3A3E"/>
+          <rect x="345" y="170" width="110" height="50" fill="#2A3A3E"/>
+        </g>
+        <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#C97B4A" letter-spacing="2">NO LIGHTS. NO REPLY.</text>
+      </svg>`,
+
+    'two-phones': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="350" fill="#1A2A2D"/>
+        <g transform="translate(220,120)">
+          <rect x="0" y="0" width="90" height="160" rx="14" fill="#23363B"/>
+          <rect x="10" y="14" width="70" height="120" rx="4" fill="#C97B4A" opacity="0.25"/>
+        </g>
+        <g transform="translate(490,120)">
+          <rect x="0" y="0" width="90" height="160" rx="14" fill="#23363B"/>
+          <rect x="10" y="14" width="70" height="120" rx="4" fill="#5C8A86" opacity="0.3"/>
+        </g>
+        <path d="M310 160 Q400 100 490 160" stroke="#5C8A86" stroke-width="2" stroke-dasharray="6 8" fill="none" opacity="0.6"/>
+        <text x="400" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#8B8478" letter-spacing="2">REACHING OUT, IN PARALLEL</text>
+      </svg>`,
+
+    'dog-warmth': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="warm1" cx="50%" cy="50%" r="60%">
+            <stop offset="0%" stop-color="#C97B4A" stop-opacity="0.35"/>
+            <stop offset="100%" stop-color="#1B2A2E" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="350" fill="#1B2A2E"/>
+        <circle cx="400" cy="175" r="160" fill="url(#warm1)"/>
+        <!-- simple dog silhouette -->
+        <g transform="translate(330,180)">
+          <ellipse cx="70" cy="70" rx="55" ry="32" fill="#2D5A52"/>
+          <circle cx="125" cy="45" r="26" fill="#2D5A52"/>
+          <path d="M118 25 q-6 -16 4 -20 q8 14 4 22 Z" fill="#2D5A52"/>
+          <path d="M138 25 q8 -14 16 -12 q-2 16 -10 20 Z" fill="#2D5A52"/>
+          <rect x="20" y="85" width="10" height="35" fill="#2D5A52"/>
+          <rect x="100" y="90" width="10" height="32" fill="#2D5A52"/>
+        </g>
+        <text x="400" y="320" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#C97B4A" letter-spacing="2">SOMETHING STILL TETHERING HER</text>
+      </svg>`,
+
+    'crossroads': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <rect width="800" height="350" fill="#16252A"/>
+        <path d="M400 350 L400 60" stroke="#8B8478" stroke-width="3" opacity="0.5"/>
+        <path d="M250 350 L400 60" stroke="#5C8A86" stroke-width="3" opacity="0.6"/>
+        <path d="M550 350 L400 60" stroke="#C97B4A" stroke-width="3" opacity="0.6"/>
+        <circle cx="400" cy="60" r="10" fill="#EDE8DC"/>
+        <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#8B8478" letter-spacing="2">TWO PATHS FORWARD</text>
+      </svg>`,
+
+    'flashing-lights': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <radialGradient id="red1" cx="35%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#C9504A" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#C9504A" stop-opacity="0"/>
+          </radialGradient>
+          <radialGradient id="blue1" cx="65%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="#4A7FC9" stop-opacity="0.5"/>
+            <stop offset="100%" stop-color="#4A7FC9" stop-opacity="0"/>
+          </radialGradient>
+        </defs>
+        <rect width="800" height="350" fill="#101A1C"/>
+        <circle cx="280" cy="175" r="170" fill="url(#red1)"/>
+        <circle cx="520" cy="175" r="170" fill="url(#blue1)"/>
+        <rect x="0" y="260" width="800" height="90" fill="#0A1112"/>
+        <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#EDE8DC" letter-spacing="2">RESPONSE DISPATCHED</text>
+      </svg>`,
+
+    'two-phones-dawn': `
+      <svg viewBox="0 0 800 350" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="dawn1" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2D454A"/>
+            <stop offset="100%" stop-color="#C97B4A" stop-opacity="0.3"/>
+          </linearGradient>
+        </defs>
+        <rect width="800" height="350" fill="url(#dawn1)"/>
+        <g transform="translate(220,120)">
+          <rect x="0" y="0" width="90" height="160" rx="14" fill="#23363B"/>
+          <rect x="10" y="14" width="70" height="120" rx="4" fill="#7FAFA9" opacity="0.35"/>
+        </g>
+        <g transform="translate(490,120)">
+          <rect x="0" y="0" width="90" height="160" rx="14" fill="#23363B"/>
+          <rect x="10" y="14" width="70" height="120" rx="4" fill="#7FAFA9" opacity="0.35"/>
+        </g>
+        <path d="M310 160 Q400 100 490 160" stroke="#7FAFA9" stroke-width="2" stroke-dasharray="4 6" fill="none" opacity="0.7"/>
+        <text x="400" y="330" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="#EDE8DC" letter-spacing="2">STAYING ON THE LINE</text>
+      </svg>`
+  };
+  return scenes[key] || scenes['night-call'];
+}
+
+
+let history = [];          // sequence of step keys visited
+let flagsSet = {};         // which indicator flags have been triggered
+let currentStepKey = 'start';
+let pendingNext = null;    // step to go to after feedback "continue"
+let totalEstimatedSteps = 6;
+
+const sceneEl = document.getElementById('scene-panel');
+const progressFill = document.getElementById('progress-fill');
+const progressLabel = document.getElementById('progress-label');
+const moduleNav = document.getElementById('module-nav');
+const indicatorListEl = document.getElementById('indicator-list');
+const formulationBox = document.getElementById('formulation-box');
+
+function initIndicators(){
+  indicatorListEl.innerHTML = '';
+  indicatorDefs.forEach(def=>{
+    const li = document.createElement('li');
+    li.className = 'indicator-item';
+    li.id = 'ind-' + def.key;
+    li.innerHTML = `<span class="indicator-dot"></span><span class="indicator-text">${def.label}</span>`;
+    indicatorListEl.appendChild(li);
+  });
+}
+
+function setFlag(key){
+  if(!key || flagsSet[key]) return;
+  flagsSet[key] = true;
+  const li = document.getElementById('ind-' + key);
+  if(li){
+    li.classList.add('filled');
+    if(key === 'disposition') li.classList.add('risk');
+  }
+  updateFormulation();
+  updateProgress();
+}
+
+function updateProgress(){
+  const filled = Object.keys(flagsSet).length;
+  const pct = Math.min(100, Math.round((filled/totalEstimatedSteps)*100));
+  progressFill.style.width = pct + '%';
+  progressLabel.textContent = `Step ${filled} of ${totalEstimatedSteps}`;
+
+  moduleNav.innerHTML = '';
+  for(let i=0;i<totalEstimatedSteps;i++){
+    const dot = document.createElement('div');
+    dot.className = 'nav-dot';
+    if(i < filled) dot.classList.add('done');
+    else if(i === filled) dot.classList.add('current');
+    moduleNav.appendChild(dot);
+  }
+}
+
+function updateFormulation(){
+  const parts = [];
+  if(flagsSet.rapport) parts.push('Rapport established before risk questions.');
+  if(flagsSet.access) parts.push('Means: ambiguous — no firearm; medication access unconfirmed.');
+  if(flagsSet.plan) parts.push('Intent: no specific method/location, but goodbye-adjacent language ("don\'t try to find me").');
+  if(flagsSet.collateral) parts.push('Collateral contact identified (roommate).');
+  if(flagsSet.protective) parts.push('Protective factors: pet attachment, close maternal relationship.');
+  if(flagsSet.disposition) parts.push('Disposition reached — see outcome.');
+
+  if(parts.length === 0){
+    formulationBox.innerHTML = '<span class="empty">Your working formulation will appear here as you gather information.</span>';
+  } else {
+    formulationBox.innerHTML = parts.map(p => '— ' + p).join('<br>');
+  }
+}
+
+function renderStep(stepKey){
+  currentStepKey = stepKey;
+  const step = steps[stepKey];
+  history.push(stepKey);
+
+  let html = '';
+
+  // scene illustration
+  if(step.scene){
+    html += `<div class="scene-art">${sceneSVG(step.scene)}<div class="scene-art-caption">${step.caption || ''}</div></div>`;
+  }
+
+  // stamp
+  if(step.stamp){
+    html += `<div class="stamp ${step.stamp.alert ? 'alert':''}">${step.stamp.text}</div>`;
+  }
+
+  // narrative text
+  html += `<div class="scene-text">${step.text}</div>`;
+
+  if(step.note){
+    html += `<div class="field-note">${step.note}</div>`;
+  }
+
+  if(step.final){
+    html += renderFinalCTA();
+    sceneEl.innerHTML = html;
+    attachFinalListener();
+    updateProgress();
+    return;
+  }
+
+  // decision prompt + choices
+  html += `<div class="decision-prompt">${step.prompt}</div>`;
+  html += `<div class="choices" id="choices-container">`;
+  step.choices.forEach((c, idx)=>{
+    html += `<button class="choice-btn" data-idx="${idx}">
+      <span class="choice-letter">${c.letter}</span>
+      <span>${c.text}</span>
+    </button>`;
+  });
+  html += `</div>`;
+  html += `<div id="feedback-zone"></div>`;
+
+  sceneEl.innerHTML = html;
+  updateProgress();
+
+  // attach listeners
+  const buttons = sceneEl.querySelectorAll('.choice-btn');
+  buttons.forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      const idx = parseInt(btn.getAttribute('data-idx'));
+      handleChoice(step, idx, buttons);
+    });
+  });
+}
+
+function handleChoice(step, idx, buttons){
+  const choice = step.choices[idx];
+
+  // disable all buttons, highlight chosen
+  buttons.forEach(b=> b.disabled = true);
+  buttons.forEach(b=> b.style.opacity = '0.5');
+  buttons[idx].style.opacity = '1';
+  buttons[idx].style.borderColor = 'var(--sage)';
+
+  if(choice.flag) setFlag(choice.flag);
+
+  const nextStep = steps[choice.next];
+  const feedbackZone = document.getElementById('feedback-zone');
+
+  if(nextStep && nextStep.feedback){
+    const fb = nextStep.feedback;
+    feedbackZone.innerHTML = `
+      <div class="feedback ${fb.type === 'caution' ? 'caution' : ''}">
+        <span class="fb-label">${fb.label}</span>
+        ${fb.text}
+      </div>
+      <button class="continue-btn" id="continue-btn">Continue →</button>
+    `;
+    document.getElementById('continue-btn').addEventListener('click', ()=>{
+      renderStep(choice.next);
+      sceneEl.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  } else {
+    renderStep(choice.next);
+  }
+}
+
+function renderFinalCTA(){
+  const outcomePositive = currentStepKey === 'disposition_911' ?
+    'You moved to an immediate welfare check.' :
+    'You staged your response, holding 911 in reserve.';
+
+  return `
+    <div class="debrief">
+      <h2>Case closed — debrief</h2>
+      <div class="sub">Here's how your assessment unfolded, and what a supervisor would flag in review.</div>
+
+      <div class="summary-grid">
+        <div class="summary-card">
+          <span class="k">Path taken</span>
+          <div class="v">${history.length} decision points navigated. ${outcomePositive}</div>
+        </div>
+        <div class="summary-card">
+          <span class="k">Indicators covered</span>
+          <div class="v">${Object.keys(flagsSet).length} of ${indicatorDefs.length} key risk-assessment areas addressed.</div>
+        </div>
+      </div>
+
+      <div class="decision-prompt" style="margin-top:4px;">Reflection — before you move on</div>
+      <div class="field-note" style="margin-top:0;">
+        <b>Consider:</b> Which indicator did you reach last, or not at all, in this run? In a live call, what would you do differently to make sure you cover means, intent, and protective factors even under time pressure? There's no single "correct" order — but a complete picture matters more than a fast one.
+      </div>
+
+      <button class="restart-btn" id="restart-btn">↺ Run the scenario again, choose differently</button>
+    </div>
+  `;
+}
+
+function attachFinalListener(){
+  const btn = document.getElementById('restart-btn');
+  if(btn){
+    btn.addEventListener('click', ()=>{
+      history = [];
+      flagsSet = {};
+      initIndicators();
+      updateFormulation();
+      renderStep('start');
+      sceneEl.scrollIntoView({behavior:'smooth', block:'start'});
+    });
+  }
+}
+
+// init
+initIndicators();
+updateFormulation();
+renderStep('start');
+</script>
+
+</body>
+</html>
