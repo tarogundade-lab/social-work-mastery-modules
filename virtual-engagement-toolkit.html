@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Choosing Your Channel — Virtual Engagement Toolkit</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:880px;
+    margin:0 auto;
+    padding:28px 24px 90px;
+  }
+
+  .tool-header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:24px;
+  }
+  .tool-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .tool-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:25px;
+    margin:0 0 8px;
+  }
+  .tool-sub{
+    font-size:14px;
+    color:var(--warmgray);
+    max-width:560px;
+    line-height:1.5;
+  }
+
+  /* ---------- TABS ---------- */
+  .mode-tabs{
+    display:flex;
+    gap:4px;
+    margin-bottom:24px;
+    border-bottom:1px solid var(--line);
+  }
+  .mode-tab{
+    background:none;
+    border:none;
+    padding:10px 18px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13.5px;
+    color:var(--warmgray);
+    cursor:pointer;
+    border-bottom:2px solid transparent;
+    margin-bottom:-1px;
+  }
+  .mode-tab.active{
+    color:var(--sage-deep);
+    border-bottom-color:var(--sage-deep);
+  }
+
+  /* ---------- QUICK-PICK ---------- */
+  .quickpick-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    margin-bottom:18px;
+  }
+  .qp-question{ margin-bottom:22px; }
+  .qp-label{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:16px;
+    margin-bottom:12px;
+    display:block;
+  }
+  .qp-options{
+    display:flex;
+    flex-direction:column;
+    gap:8px;
+  }
+  .qp-btn{
+    text-align:left;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:11px 15px;
+    font-family:'Inter';
+    font-size:13.5px;
+    color:var(--ink);
+    cursor:pointer;
+  }
+  .qp-btn:hover{ border-color:var(--sage); background:#fff; }
+  .qp-btn.selected{
+    border-color:var(--sage-deep);
+    background:rgba(92,138,134,0.1);
+    font-weight:600;
+  }
+
+  .qp-result{
+    margin-top:20px;
+    padding-top:20px;
+    border-top:1px dashed var(--line);
+    display:none;
+  }
+  .qp-result.show{ display:block; animation:fadeIn 0.3s ease; }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+
+  .result-pair{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  @media (max-width:600px){ .result-pair{ grid-template-columns:1fr; } }
+
+  .result-box{
+    background:#FBFAF6;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+  }
+  .result-box-label{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:10.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    display:block;
+    margin-bottom:6px;
+  }
+  .result-box-value{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:18px;
+    margin-bottom:6px;
+  }
+  .result-box-why{
+    font-size:12.5px;
+    color:var(--warmgray);
+    line-height:1.5;
+  }
+
+  .result-note{
+    font-size:13px;
+    color:var(--ink);
+    background:rgba(201,123,74,0.08);
+    border:1px solid rgba(201,123,74,0.25);
+    border-radius:4px;
+    padding:11px 14px;
+    line-height:1.5;
+  }
+
+  .qp-reset{
+    display:inline-block;
+    margin-top:14px;
+    font-size:12px;
+    color:var(--warmgray);
+    text-decoration:underline;
+    cursor:pointer;
+  }
+
+  /* ---------- REFERENCE TABLE VIEW ---------- */
+  .ref-section{ margin-bottom:26px; }
+  .ref-section-title{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--warmgray);
+    margin: 4px 0 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .ref-section-title::after{
+    content:"";
+    flex:1;
+    height:1px;
+    background:var(--line);
+  }
+
+  .ref-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    gap:12px;
+  }
+  @media (max-width:680px){ .ref-grid{ grid-template-columns:1fr; } }
+
+  .ref-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:17px 19px;
+  }
+  .ref-card-head{
+    display:flex;
+    align-items:center;
+    gap:9px;
+    margin-bottom:9px;
+  }
+  .ref-icon{
+    width:30px; height:30px;
+    border-radius:50%;
+    background:rgba(92,138,134,0.12);
+    color:var(--sage-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-family:'JetBrains Mono';
+    font-size:13px;
+    font-weight:600;
+    flex-shrink:0;
+  }
+  .ref-name{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:15.5px;
+  }
+  .ref-best-for{
+    font-size:12.5px;
+    color:var(--ink);
+    margin-bottom:8px;
+    line-height:1.5;
+  }
+  .ref-best-for b{ color:var(--sage-deep); }
+  .ref-avoid{
+    font-size:12px;
+    color:var(--clay-deep);
+    line-height:1.45;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="tool-header">
+    <span class="tool-eyebrow">Quick Reference · Virtual Engagement Toolkit</span>
+    <h1 class="tool-title">Choosing Your Channel &amp; Documentation</h1>
+    <p class="tool-sub">How you reach a client and how you record it aren't separate decisions — they move together. Use the quick guide for a fast read, or browse the reference below.</p>
+  </div>
+
+  <div class="mode-tabs">
+    <button class="mode-tab active" id="tab-quick">Quick Guide</button>
+    <button class="mode-tab" id="tab-reference">Browse Reference</button>
+  </div>
+
+  <!-- QUICK PICK VIEW -->
+  <div id="view-quick">
+    <div class="quickpick-card">
+      <div class="qp-question">
+        <span class="qp-label">1. How urgent is this contact?</span>
+        <div class="qp-options" id="opts-urgency">
+          <button class="qp-btn" data-q="urgency" data-v="routine">Routine — a scheduled or expected check-in</button>
+          <button class="qp-btn" data-q="urgency" data-v="timely">Time-sensitive — needs a response today</button>
+          <button class="qp-btn" data-q="urgency" data-v="urgent">Urgent — safety or crisis concern, needs contact now</button>
+        </div>
+      </div>
+
+      <div class="qp-question">
+        <span class="qp-label">2. How sensitive is the content?</span>
+        <div class="qp-options" id="opts-sensitivity">
+          <button class="qp-btn" data-q="sensitivity" data-v="low">Low — logistics, scheduling, general updates</button>
+          <button class="qp-btn" data-q="sensitivity" data-v="moderate">Moderate — personal but not high-stakes</button>
+          <button class="qp-btn" data-q="sensitivity" data-v="high">High — emotionally difficult, risk-related, or confidential</button>
+        </div>
+      </div>
+
+      <div class="qp-question">
+        <span class="qp-label">3. Does this need to become part of the official record?</span>
+        <div class="qp-options" id="opts-record">
+          <button class="qp-btn" data-q="record" data-v="no">Not really — informal, low-stakes</button>
+          <button class="qp-btn" data-q="record" data-v="maybe">Possibly — worth a brief note</button>
+          <button class="qp-btn" data-q="record" data-v="yes">Yes — this needs a formal entry regardless</button>
+        </div>
+      </div>
+
+      <div class="qp-result" id="qp-result">
+        <div class="result-pair">
+          <div class="result-box">
+            <span class="result-box-label">Channel</span>
+            <div class="result-box-value" id="result-channel">—</div>
+            <div class="result-box-why" id="result-channel-why"></div>
+          </div>
+          <div class="result-box">
+            <span class="result-box-label">Documentation</span>
+            <div class="result-box-value" id="result-doc">—</div>
+            <div class="result-box-why" id="result-doc-why"></div>
+          </div>
+        </div>
+        <div class="result-note" id="result-note"></div>
+      </div>
+
+      <span class="qp-reset" id="qp-reset">Start over</span>
+    </div>
+  </div>
+
+  <!-- REFERENCE VIEW -->
+  <div id="view-reference" style="display:none;">
+    <div class="ref-section">
+      <div class="ref-section-title">Communication channels</div>
+      <div class="ref-grid" id="channel-grid"></div>
+    </div>
+    <div class="ref-section">
+      <div class="ref-section-title">Documentation types</div>
+      <div class="ref-grid" id="doc-grid"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ============================================================
+   REFERENCE DATA
+   ============================================================ */
+const channels = [
+  {
+    icon:'📞', name:'Phone call',
+    bestFor:'<b>Best for:</b> Urgent or sensitive conversations where tone and immediacy matter, and when you need to hear how someone actually sounds.',
+    avoid:'Avoid when: you need a written record of specifics, or the client has stated a preference against calls.'
+  },
+  {
+    icon:'🎥', name:'Video call',
+    bestFor:'<b>Best for:</b> Building rapport, reading non-verbal cues, sessions that would normally be in-person (intake, therapy-adjacent check-ins).',
+    avoid:'Avoid when: the client lacks reliable video access, or the setting makes video uncomfortable for them.'
+  },
+  {
+    icon:'✉️', name:'Email',
+    bestFor:'<b>Best for:</b> Routine, non-urgent updates; anything that benefits from a written record both parties can reference later.',
+    avoid:'Avoid for: urgent matters (easy to miss), or highly sensitive content better delivered by voice.'
+  },
+  {
+    icon:'💬', name:'Text / SMS',
+    bestFor:'<b>Best for:</b> Quick logistics — confirming appointments, brief check-ins, when a client strongly prefers texting.',
+    avoid:'Avoid for: anything sensitive, lengthy, or that needs to be unambiguous — tone is easily lost.'
+  },
+  {
+    icon:'🔒', name:'Secure client portal',
+    bestFor:'<b>Best for:</b> Anything involving protected health information, formal updates, or content that should live inside your agency\'s compliant system.',
+    avoid:'Avoid when: the client doesn\'t reliably check it, or the matter is urgent — portals are often not real-time.'
+  },
+  {
+    icon:'👤', name:'In-person (when possible)',
+    bestFor:'<b>Best for:</b> High-risk situations, first meetings when feasible, anything where physical presence changes the outcome.',
+    avoid:'Not always possible in a remote-first model — note when it genuinely should be escalated to this.'
+  }
+];
+
+const docTypes = [
+  {
+    icon:'01', name:'Formal progress note',
+    bestFor:'<b>Use for:</b> Any contact involving risk, a clinical decision, a change in plan, or anything required by your agency\'s protocol — goes in the official record.',
+    avoid:'Write soon after contact, not days later — accuracy degrades fast.'
+  },
+  {
+    icon:'02', name:'Brief case note',
+    bestFor:'<b>Use for:</b> Routine contacts worth a short record — what happened, any follow-up needed — without full progress-note formality.',
+    avoid:'Still part of the record; keep it factual, not informal commentary.'
+  },
+  {
+    icon:'03', name:'Internal/informal log',
+    bestFor:'<b>Use for:</b> Your own tracking — reminders, scheduling notes, things that help you but aren\'t clinically necessary to formalize.',
+    avoid:'Don\'t let anything risk-relevant live only here — if in doubt, it belongs in a formal note.'
+  },
+  {
+    icon:'04', name:'No documentation needed',
+    bestFor:'<b>Use for:</b> Truly logistical, non-clinical exchanges (e.g. confirming a meeting time) with no bearing on care.',
+    avoid:'When unsure whether something counts as "clinical," default to documenting briefly — it\'s cheap insurance.'
+  }
+];
+
+function renderReference(){
+  document.getElementById('channel-grid').innerHTML = channels.map(c => `
+    <div class="ref-card">
+      <div class="ref-card-head">
+        <span class="ref-icon">${c.icon}</span>
+        <span class="ref-name">${c.name}</span>
+      </div>
+      <div class="ref-best-for">${c.bestFor}</div>
+      <div class="ref-avoid">${c.avoid}</div>
+    </div>
+  `).join('');
+
+  document.getElementById('doc-grid').innerHTML = docTypes.map(d => `
+    <div class="ref-card">
+      <div class="ref-card-head">
+        <span class="ref-icon">${d.icon}</span>
+        <span class="ref-name">${d.name}</span>
+      </div>
+      <div class="ref-best-for">${d.bestFor}</div>
+      <div class="ref-avoid">${d.avoid}</div>
+    </div>
+  `).join('');
+}
+
+/* ============================================================
+   TABS
+   ============================================================ */
+document.getElementById('tab-quick').addEventListener('click', ()=> switchTab('quick'));
+document.getElementById('tab-reference').addEventListener('click', ()=> switchTab('reference'));
+
+function switchTab(which){
+  document.getElementById('tab-quick').classList.toggle('active', which==='quick');
+  document.getElementById('tab-reference').classList.toggle('active', which==='reference');
+  document.getElementById('view-quick').style.display = which==='quick' ? 'block' : 'none';
+  document.getElementById('view-reference').style.display = which==='reference' ? 'block' : 'none';
+}
+
+/* ============================================================
+   QUICK-PICK LOGIC
+   ============================================================ */
+let answers = {};
+
+['urgency','sensitivity','record'].forEach(q=>{
+  document.querySelectorAll(`.qp-btn[data-q="${q}"]`).forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      answers[q] = btn.dataset.v;
+      document.querySelectorAll(`.qp-btn[data-q="${q}"]`).forEach(b=> b.classList.remove('selected'));
+      btn.classList.add('selected');
+      maybeShowResult();
+    });
+  });
+});
+
+document.getElementById('qp-reset').addEventListener('click', ()=>{
+  answers = {};
+  document.querySelectorAll('.qp-btn').forEach(b=> b.classList.remove('selected'));
+  document.getElementById('qp-result').classList.remove('show');
+});
+
+function maybeShowResult(){
+  if(answers.urgency && answers.sensitivity && answers.record){
+    computeResult();
+  }
+}
+
+function computeResult(){
+  const { urgency, sensitivity, record } = answers;
+  let channel, channelWhy, doc, docWhy, note = '';
+
+  // Channel logic
+  if(urgency === 'urgent'){
+    channel = 'Phone call (or escalate to in-person)';
+    channelWhy = 'Urgency calls for real-time, voice-level contact — not anything async.';
+  } else if(sensitivity === 'high'){
+    channel = 'Phone or video call';
+    channelWhy = 'Sensitive content deserves tone and presence, even when not urgent.';
+  } else if(urgency === 'timely' && sensitivity === 'low'){
+    channel = 'Phone call or secure portal message';
+    channelWhy = 'Needs a same-day response, but the content itself is light enough for a quicker channel.';
+  } else if(sensitivity === 'low' && urgency === 'routine'){
+    channel = 'Email, text, or portal — client\'s preference';
+    channelWhy = 'Low stakes and no urgency — let the client\'s preferred channel lead.';
+  } else {
+    channel = 'Secure portal message or email';
+    channelWhy = 'Moderate sensitivity without urgency fits an asynchronous, written channel well.';
+  }
+
+  // Documentation logic
+  if(record === 'yes' || sensitivity === 'high' || urgency === 'urgent'){
+    doc = 'Formal progress note';
+    docWhy = 'High sensitivity, urgency, or an explicit record need all point to a full formal entry.';
+  } else if(record === 'maybe' || sensitivity === 'moderate'){
+    doc = 'Brief case note';
+    docWhy = 'Worth a short factual record, without full progress-note weight.';
+  } else {
+    doc = 'Internal log, or none needed';
+    docWhy = 'Low stakes, no urgency, not record-relevant — light or no documentation fits.';
+  }
+
+  // Cross-check note: highlight when channel and documentation choices are in tension
+  if(urgency === 'urgent' && record !== 'yes'){
+    note = 'Worth noting: you marked this as urgent but not clearly record-required. In practice, urgent contacts almost always warrant documentation — when in doubt, write the note.';
+  } else if(sensitivity === 'high' && record === 'no'){
+    note = 'Worth noting: high-sensitivity content and "no documentation needed" rarely go together in real practice — double check whether this really doesn\'t belong in the record.';
+  } else {
+    note = 'These two choices reinforce each other here — channel and documentation are pointing the same direction.';
+  }
+
+  document.getElementById('result-channel').textContent = channel;
+  document.getElementById('result-channel-why').textContent = channelWhy;
+  document.getElementById('result-doc').textContent = doc;
+  document.getElementById('result-doc-why').textContent = docWhy;
+  document.getElementById('result-note').textContent = note;
+  document.getElementById('qp-result').classList.add('show');
+}
+
+renderReference();
+</script>
+
+</body>
+</html>
