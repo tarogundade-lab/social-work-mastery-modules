@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Build a Workflow — Intake Automation</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:980px;
+    margin:0 auto;
+    padding:28px 24px 90px;
+  }
+
+  .tool-header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:22px;
+  }
+  .tool-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .tool-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:25px;
+    margin:0 0 8px;
+  }
+  .tool-sub{
+    font-size:14px;
+    color:var(--warmgray);
+    max-width:600px;
+    line-height:1.5;
+  }
+
+  .intro-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:18px 22px;
+    margin-bottom:24px;
+    position:relative;
+    font-size:13.5px;
+    line-height:1.6;
+  }
+  .intro-card::before{
+    content:"";
+    position:absolute;
+    left:0; top:16px; bottom:16px;
+    width:3px;
+    background:var(--sage);
+    border-radius:0 2px 2px 0;
+  }
+
+  .build-stage{
+    display:grid;
+    grid-template-columns: 1fr 320px;
+    gap:24px;
+    align-items:start;
+    margin-bottom:24px;
+  }
+  @media (max-width:840px){ .build-stage{ grid-template-columns:1fr; } }
+
+  .block-picker{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+  }
+  .stage-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--warmgray);
+    margin-bottom:4px;
+  }
+  .stage-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:18px;
+    margin:0 0 14px;
+  }
+
+  .block-option{
+    display:flex;
+    align-items:flex-start;
+    gap:12px;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:13px 15px;
+    margin-bottom:10px;
+    cursor:pointer;
+    background:var(--paper);
+    transition: border-color 0.15s ease, background 0.15s ease;
+  }
+  .block-option:hover{ border-color:var(--sage); background:#fff; }
+  .block-option.selected{
+    border-color:var(--sage-deep);
+    background:rgba(92,138,134,0.1);
+  }
+
+  .block-icon{
+    width:30px; height:30px;
+    border-radius:6px;
+    background:rgba(92,138,134,0.14);
+    color:var(--sage-deep);
+    display:flex; align-items:center; justify-content:center;
+    font-size:15px;
+    flex-shrink:0;
+  }
+  .block-icon.trigger{ background:rgba(92,138,134,0.16); color:var(--sage-deep); }
+  .block-icon.condition{ background:rgba(201,123,74,0.16); color:var(--clay-deep); }
+  .block-icon.action{ background:rgba(45,90,82,0.14); color:var(--sage-deep); }
+  .block-text-title{
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13.5px;
+  }
+  .block-text-sub{
+    font-size:12px;
+    color:var(--warmgray);
+    margin-top:2px;
+    line-height:1.4;
+  }
+
+  .canvas-panel{
+    position:sticky;
+    top:20px;
+    background:var(--ink);
+    border-radius:6px;
+    padding:22px 18px;
+    color:var(--paper);
+    min-height:380px;
+  }
+  .canvas-title{
+    font-family:'JetBrains Mono', monospace;
+    font-size:10.5px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:#A8B5B3;
+    margin-bottom:16px;
+  }
+
+  .flow-node{
+    background:rgba(255,255,255,0.06);
+    border:1px solid rgba(255,255,255,0.15);
+    border-radius:5px;
+    padding:11px 14px;
+    margin-bottom:8px;
+    font-size:12.5px;
+    line-height:1.4;
+    opacity:0;
+    transform:translateY(6px);
+    animation: nodeIn 0.4s ease forwards;
+  }
+  @keyframes nodeIn{ to{ opacity:1; transform:translateY(0); } }
+
+  .flow-node.trigger{ border-left:3px solid var(--sage); }
+  .flow-node.condition{ border-left:3px solid var(--clay); }
+  .flow-node.action{ border-left:3px solid #8FCBC0; }
+  .flow-node.placeholder{
+    border-style:dashed;
+    color:#7A8886;
+    font-style:italic;
+    opacity:1;
+    animation:none;
+  }
+
+  .flow-node-label{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:9.5px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:#A8B5B3;
+    display:block;
+    margin-bottom:3px;
+  }
+  .flow-node.condition .branch-tags{
+    display:flex;
+    gap:6px;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
+  .branch-tag{
+    font-size:10px;
+    background:rgba(201,123,74,0.2);
+    color:#E8B870;
+    padding:2px 7px;
+    border-radius:10px;
+  }
+
+  .flow-connector{
+    width:2px;
+    height:14px;
+    background:rgba(255,255,255,0.2);
+    margin:0 auto;
+  }
+
+  .test-section{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    display:none;
+  }
+  .test-section.show{ display:block; }
+  .test-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:18px;
+    margin:0 0 6px;
+  }
+  .test-sub{
+    font-size:13px;
+    color:var(--warmgray);
+    margin-bottom:18px;
+  }
+
+  .test-case-row{
+    display:flex;
+    gap:10px;
+    margin-bottom:18px;
+    flex-wrap:wrap;
+  }
+  .test-case-btn{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:20px;
+    padding:8px 16px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:12.5px;
+    cursor:pointer;
+    color:var(--ink);
+  }
+  .test-case-btn:hover{ border-color:var(--sage); }
+  .test-case-btn.active{
+    border-color:var(--sage-deep);
+    background:rgba(92,138,134,0.12);
+    color:var(--sage-deep);
+  }
+
+  .run-trace{
+    background:#FBFAF6;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:16px 18px;
+    min-height:60px;
+  }
+  .trace-step{
+    display:flex;
+    gap:10px;
+    align-items:flex-start;
+    font-size:13px;
+    margin-bottom:10px;
+    opacity:0;
+    animation: traceIn 0.35s ease forwards;
+  }
+  @keyframes traceIn{ to{opacity:1;} }
+  .trace-marker{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--sage-deep);
+    background:rgba(92,138,134,0.14);
+    width:20px; height:20px;
+    border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+    margin-top:1px;
+  }
+  .trace-text{ line-height:1.5; }
+  .trace-text b{ color:var(--sage-deep); }
+  .trace-placeholder{
+    color:var(--warmgray);
+    font-size:13px;
+    font-style:italic;
+  }
+
+  .reset-row{
+    margin-top:20px;
+    text-align:center;
+  }
+  .reset-btn{
+    background:transparent;
+    border:1px solid var(--ink);
+    color:var(--ink);
+    border-radius:4px;
+    padding:9px 20px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .reset-btn:hover{ background:var(--ink); color:var(--paper); }
+
+  .takeaway-note{
+    font-size:12.5px;
+    color:var(--warmgray);
+    margin-top:16px;
+    padding-top:14px;
+    border-top:1px dashed var(--line);
+    line-height:1.55;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="tool-header">
+    <span class="tool-eyebrow">Hands-On · Automation &amp; Low-Code Tools</span>
+    <h1 class="tool-title">Build an Intake Workflow</h1>
+    <p class="tool-sub">The same logic behind every low-code automation tool (Zapier, Make, Airtable Automations, your agency's intake system): a trigger starts it, a condition routes it, an action does something. Build one below, then run real cases through it.</p>
+  </div>
+
+  <div class="intro-card">
+    Your agency gets new client intake forms submitted online. Right now, someone manually reads each one and decides what happens next — which takes time and is easy to get inconsistent. You're going to build the automation that should have existed already.
+  </div>
+
+  <div class="build-stage">
+    <div class="block-picker">
+      <div class="stage-label" id="stage-label">Step 1 of 3</div>
+      <h2 class="stage-title" id="stage-title">Choose your trigger</h2>
+      <div id="block-options"></div>
+    </div>
+
+    <div class="canvas-panel">
+      <div class="canvas-title">Your workflow</div>
+      <div id="flow-canvas"></div>
+    </div>
+  </div>
+
+  <div class="test-section" id="test-section">
+    <h2 class="test-title">Run a test case</h2>
+    <p class="test-sub">Three real intake submissions. Run each through the workflow you built and watch it actually route.</p>
+
+    <div class="test-case-row" id="test-case-row"></div>
+
+    <div class="run-trace" id="run-trace">
+      <div class="trace-placeholder">Pick a test case above to run it through your workflow.</div>
+    </div>
+
+    <div class="takeaway-note">This is a simplified simulation of the logic — real tools like Zapier or Make connect to your actual forms, email, and case management systems. But the underlying shape (trigger → condition → action) is exactly this.</div>
+
+    <div class="reset-row">
+      <button class="reset-btn" id="reset-btn">↺ Rebuild from scratch</button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const triggerOptions = [
+  {id:'trig-submit', icon:'📥', title:'New intake form submitted', sub:'Fires the moment a client completes the online intake form.'}
+];
+
+const conditionOptions = [
+  {id:'cond-risk', icon:'⚠', title:'Check the risk/urgency flag on the form', sub:'Routes differently depending on whether the client marked anything urgent.', branches:['Urgent','Routine']},
+  {id:'cond-program', icon:'🗂', title:'Check which program they\'re requesting', sub:'Routes based on housing, mental health, or general services.', branches:['Housing','Mental Health','General']}
+];
+
+const actionOptionsByCondition = {
+  'cond-risk':[
+    {id:'act-assign-urgent', icon:'🚩', title:'If urgent: assign to on-call caseworker immediately', sub:'Skips the queue, notifies someone right away.'},
+    {id:'act-assign-routine', icon:'📋', title:'If routine: add to the standard intake queue', sub:'Goes into normal rotation, no immediate alert.'},
+    {id:'act-both', icon:'✉️', title:'Either way: send the client a confirmation email', sub:'Lets them know their form was received, regardless of routing.'}
+  ],
+  'cond-program':[
+    {id:'act-housing', icon:'🏠', title:'If housing: route to Housing Services queue', sub:'Sends to the team handling housing-specific intakes.'},
+    {id:'act-mh', icon:'🧠', title:'If mental health: route to Clinical Intake queue', sub:'Sends to clinically-trained intake staff.'},
+    {id:'act-general', icon:'📂', title:'If general: route to General Intake queue', sub:'Default queue for anything else.'}
+  ]
+};
+
+let workflow = { trigger:null, condition:null, actions:[] };
+let buildStep = 1;
+
+const blockOptionsEl = document.getElementById('block-options');
+const flowCanvas = document.getElementById('flow-canvas');
+
+function renderStep(){
+  const stageLabel = document.getElementById('stage-label');
+  const stageTitle = document.getElementById('stage-title');
+
+  if(buildStep === 1){
+    stageLabel.textContent = 'Step 1 of 3';
+    stageTitle.textContent = 'Choose your trigger';
+    renderOptions(triggerOptions, 'trigger');
+  } else if(buildStep === 2){
+    stageLabel.textContent = 'Step 2 of 3';
+    stageTitle.textContent = 'Add a condition';
+    renderOptions(conditionOptions, 'condition');
+  } else if(buildStep === 3){
+    stageLabel.textContent = 'Step 3 of 3';
+    stageTitle.textContent = 'Add actions (pick all that should run)';
+    const actions = actionOptionsByCondition[workflow.condition.id] || [];
+    renderOptions(actions, 'action', true);
+  }
+}
+
+function renderOptions(options, type, multiSelect){
+  blockOptionsEl.innerHTML = options.map(opt => `
+    <div class="block-option" data-id="${opt.id}" data-type="${type}">
+      <div class="block-icon ${type}">${opt.icon}</div>
+      <div>
+        <div class="block-text-title">${opt.title}</div>
+        <div class="block-text-sub">${opt.sub}</div>
+      </div>
+    </div>
+  `).join('');
+
+  if(!multiSelect){
+    blockOptionsEl.innerHTML += `<div style="margin-top:14px; font-size:12px; color:var(--warmgray);">Click an option above to continue.</div>`;
+  } else {
+    blockOptionsEl.innerHTML += `<button class="reset-btn" id="confirm-actions-btn" style="margin-top:10px; width:100%;">Build workflow →</button>`;
+  }
+
+  document.querySelectorAll('.block-option').forEach(el=>{
+    el.addEventListener('click', ()=> handleBlockClick(el, options, type, multiSelect));
+  });
+
+  if(multiSelect){
+    document.getElementById('confirm-actions-btn').addEventListener('click', finishBuild);
+  }
+}
+
+function handleBlockClick(el, options, type, multiSelect){
+  const id = el.dataset.id;
+  const opt = options.find(o=> o.id === id);
+
+  if(!multiSelect){
+    if(type === 'trigger'){ workflow.trigger = opt; buildStep = 2; }
+    if(type === 'condition'){ workflow.condition = opt; buildStep = 3; }
+    renderFlowCanvas();
+    renderStep();
+  } else {
+    el.classList.toggle('selected');
+    const selectedIds = Array.from(document.querySelectorAll('.block-option.selected')).map(e=> e.dataset.id);
+    workflow.actions = options.filter(o=> selectedIds.includes(o.id));
+    renderFlowCanvas();
+  }
+}
+
+function renderFlowCanvas(){
+  let html = '';
+
+  if(workflow.trigger){
+    html += `<div class="flow-node trigger"><span class="flow-node-label">Trigger</span>${workflow.trigger.title}</div>`;
+    html += `<div class="flow-connector"></div>`;
+  } else {
+    html += `<div class="flow-node placeholder">Trigger will appear here</div>`;
+  }
+
+  if(workflow.condition){
+    html += `<div class="flow-node condition"><span class="flow-node-label">Condition</span>${workflow.condition.title}
+      <div class="branch-tags">${workflow.condition.branches.map(b=>`<span class="branch-tag">${b}</span>`).join('')}</div>
+    </div>`;
+    html += `<div class="flow-connector"></div>`;
+  } else if(workflow.trigger){
+    html += `<div class="flow-node placeholder">Condition will appear here</div>`;
+  }
+
+  if(workflow.actions && workflow.actions.length){
+    workflow.actions.forEach(a=>{
+      html += `<div class="flow-node action"><span class="flow-node-label">Action</span>${a.title}</div>`;
+    });
+  } else if(workflow.condition){
+    html += `<div class="flow-node placeholder">Actions will appear here</div>`;
+  }
+
+  flowCanvas.innerHTML = html;
+}
+
+function finishBuild(){
+  if(!workflow.actions || workflow.actions.length === 0){
+    alert('Select at least one action before building.');
+    return;
+  }
+  document.getElementById('test-section').classList.add('show');
+  renderTestCases();
+  document.getElementById('test-section').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+const testCases = [
+  {
+    id:'case1', label:'Case A — Maria',
+    facts:{ urgent:true, program:'Housing' },
+    summary:'Maria marked her situation as urgent and is requesting housing assistance.'
+  },
+  {
+    id:'case2', label:'Case B — Devon',
+    facts:{ urgent:false, program:'Mental Health' },
+    summary:'Devon\'s form is routine, requesting mental health services.'
+  },
+  {
+    id:'case3', label:'Case C — Priya',
+    facts:{ urgent:false, program:'General' },
+    summary:'Priya submitted a routine general services request.'
+  }
+];
+
+function renderTestCases(){
+  document.getElementById('test-case-row').innerHTML = testCases.map(tc => `
+    <button class="test-case-btn" data-id="${tc.id}">${tc.label}</button>
+  `).join('');
+
+  document.querySelectorAll('.test-case-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      document.querySelectorAll('.test-case-btn').forEach(b=> b.classList.remove('active'));
+      btn.classList.add('active');
+      const tc = testCases.find(t=> t.id === btn.dataset.id);
+      runTestCase(tc);
+    });
+  });
+}
+
+function runTestCase(tc){
+  const traceEl = document.getElementById('run-trace');
+  let steps = [];
+
+  steps.push(`<b>${workflow.trigger.title}</b> — ${tc.summary}`);
+
+  if(workflow.condition.id === 'cond-risk'){
+    const branch = tc.facts.urgent ? 'Urgent' : 'Routine';
+    steps.push(`Checking condition: <b>${workflow.condition.title}</b> → this case is <b>${branch}</b>`);
+
+    const matchingActions = workflow.actions.filter(a=>{
+      if(branch === 'Urgent') return a.id === 'act-assign-urgent' || a.id === 'act-both';
+      return a.id === 'act-assign-routine' || a.id === 'act-both';
+    });
+
+    if(matchingActions.length === 0){
+      steps.push(`No matching action was configured for this branch — the case would currently fall through with no action taken. Worth adding one.`);
+    } else {
+      matchingActions.forEach(a=> steps.push(`Action taken: <b>${a.title}</b>`));
+    }
+  } else if(workflow.condition.id === 'cond-program'){
+    const branch = tc.facts.program;
+    steps.push(`Checking condition: <b>${workflow.condition.title}</b> → this case is <b>${branch}</b>`);
+
+    const matchingActions = workflow.actions.filter(a=>{
+      if(branch === 'Housing') return a.id === 'act-housing';
+      if(branch === 'Mental Health') return a.id === 'act-mh';
+      return a.id === 'act-general';
+    });
+
+    if(matchingActions.length === 0){
+      steps.push(`No matching action was configured for this branch — the case would currently fall through with no action taken. Worth adding one.`);
+    } else {
+      matchingActions.forEach(a=> steps.push(`Action taken: <b>${a.title}</b>`));
+    }
+  }
+
+  traceEl.innerHTML = steps.map((s, i) => `
+    <div class="trace-step" style="animation-delay:${i * 0.25}s">
+      <span class="trace-marker">${i+1}</span>
+      <span class="trace-text">${s}</span>
+    </div>
+  `).join('');
+}
+
+document.getElementById('reset-btn').addEventListener('click', ()=>{
+  workflow = { trigger:null, condition:null, actions:[] };
+  buildStep = 1;
+  document.getElementById('test-section').classList.remove('show');
+  renderFlowCanvas();
+  renderStep();
+  window.scrollTo({top:0, behavior:'smooth'});
+});
+
+renderFlowCanvas();
+renderStep();
+</script>
+
+</body>
+</html>
