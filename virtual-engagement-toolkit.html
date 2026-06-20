@@ -280,27 +280,27 @@
       <div class="qp-question">
         <span class="qp-label">1. How urgent is this contact?</span>
         <div class="qp-options" id="opts-urgency">
-          <button class="qp-btn" data-q="urgency" data-v="routine">Routine :a scheduled or expected check-in</button>
-          <button class="qp-btn" data-q="urgency" data-v="timely">Time-sensitive :needs a response today</button>
-          <button class="qp-btn" data-q="urgency" data-v="urgent">Urgent :safety or crisis concern, needs contact now</button>
+          <button class="qp-btn" data-q="urgency" data-v="routine">Routine:a scheduled or expected check-in</button>
+          <button class="qp-btn" data-q="urgency" data-v="timely">Time-sensitive:needs a response today</button>
+          <button class="qp-btn" data-q="urgency" data-v="urgent">Urgent:safety or crisis concern, needs contact now</button>
         </div>
       </div>
 
       <div class="qp-question">
         <span class="qp-label">2. How sensitive is the content?</span>
         <div class="qp-options" id="opts-sensitivity">
-          <button class="qp-btn" data-q="sensitivity" data-v="low">Low :logistics, scheduling, general updates</button>
-          <button class="qp-btn" data-q="sensitivity" data-v="moderate">Moderate :personal but not high-stakes</button>
-          <button class="qp-btn" data-q="sensitivity" data-v="high">High :emotionally difficult, risk-related, or confidential</button>
+          <button class="qp-btn" data-q="sensitivity" data-v="low">Low:logistics, scheduling, general updates</button>
+          <button class="qp-btn" data-q="sensitivity" data-v="moderate">Moderate:personal but not high-stakes</button>
+          <button class="qp-btn" data-q="sensitivity" data-v="high">High:emotionally difficult, risk-related, or confidential</button>
         </div>
       </div>
 
       <div class="qp-question">
         <span class="qp-label">3. Does this need to become part of the official record?</span>
         <div class="qp-options" id="opts-record">
-          <button class="qp-btn" data-q="record" data-v="no">Not really :informal, low-stakes</button>
-          <button class="qp-btn" data-q="record" data-v="maybe">Possibly :worth a brief note</button>
-          <button class="qp-btn" data-q="record" data-v="yes">Yes :this needs a formal entry regardless</button>
+          <button class="qp-btn" data-q="record" data-v="no">Not really:informal, low-stakes</button>
+          <button class="qp-btn" data-q="record" data-v="maybe">Possibly:worth a brief note</button>
+          <button class="qp-btn" data-q="record" data-v="yes">Yes:this needs a formal entry regardless</button>
         </div>
       </div>
 
@@ -346,27 +346,27 @@ const channels = [
   {
     icon:'📞', name:'Phone call',
     bestFor:'<b>Best for:</b> Urgent or sensitive conversations where tone and immediacy matter, and when you need to hear how someone actually sounds.',
-    avoid:'Avoid when: you need a written record of specifics, or the client has stated a preference against calls.'
+    avoid: ' Avoid when: you need a written record of specifics, or the client has stated a preference against calls.'
   },
   {
     icon:'🎥', name:'Video call',
     bestFor:'<b>Best for:</b> Building rapport, reading non-verbal cues, sessions that would normally be in-person (intake, therapy-adjacent check-ins).',
-    avoid:'Avoid when: the client lacks reliable video access, or the setting makes video uncomfortable for them.'
+    avoid: ' Avoid when: the client lacks reliable video access, or the setting makes video uncomfortable for them.'
   },
   {
     icon:'✉️', name:'Email',
     bestFor:'<b>Best for:</b> Routine, non-urgent updates; anything that benefits from a written record both parties can reference later.',
-    avoid:'Avoid for: urgent matters (easy to miss), or highly sensitive content better delivered by voice.'
+    avoid: ' Avoid for: urgent matters (easy to miss), or highly sensitive content better delivered by voice.'
   },
   {
     icon:'💬', name:'Text / SMS',
-    bestFor:'<b>Best for:</b> Quick logistics :confirming appointments, brief check-ins, when a client strongly prefers texting.',
-    avoid:'Avoid for: anything sensitive, lengthy, or that needs to be unambiguous :tone is easily lost.'
+    bestFor:'<b>Best for:</b> Quick logistics: confirming appointments, brief check-ins, when a client strongly prefers texting.',
+    avoid: ' Avoid for: anything sensitive, lengthy, or that needs to be unambiguous: tone is easily lost.'
   },
   {
     icon:'🔒', name:'Secure client portal',
     bestFor:'<b>Best for:</b> Anything involving protected health information, formal updates, or content that should live inside your agency\'s compliant system.',
-    avoid:'Avoid when: the client doesn\'t reliably check it, or the matter is urgent :portals are often not real-time.'
+    avoid: ' Avoid when: the client doesn\'t reliably check it, or the matter is urgent: portals are often not real-time.'
   },
   {
     icon:'👤', name:'In-person (when possible)',
@@ -379,22 +379,22 @@ const docTypes = [
   {
     icon:'01', name:'Formal progress note',
     bestFor:'<b>Use for:</b> Any contact involving risk, a clinical decision, a change in plan, or anything required by your agency\'s protocol :goes in the official record.',
-    avoid:'Write soon after contact, not days later :accuracy degrades fast.'
+    avoid:'Write soon after contact, not days later: accuracy degrades fast.'
   },
   {
-    icon:'02', name:'Brief case note',
-    bestFor:'<b>Use for:</b> Routine contacts worth a short record :what happened, any follow-up needed :without full progress-note formality.',
+    icon:'02', name: ' Brief case note',
+    bestFor:'<b>Use for:</b> Routine contacts worth a short record: what happened, any follow-up needed: without full progress-note formality.',
     avoid:'Still part of the record; keep it factual, not informal commentary.'
   },
   {
     icon:'03', name:'Internal/informal log',
-    bestFor:'<b>Use for:</b> Your own tracking :reminders, scheduling notes, things that help you but aren\'t clinically necessary to formalize.',
-    avoid:'Don\'t let anything risk-relevant live only here :if in doubt, it belongs in a formal note.'
+    bestFor:'<b>Use for:</b> Your own tracking: reminders, scheduling notes, things that help you but aren\'t clinically necessary to formalize.',
+    avoid:'Don\'t let anything risk-relevant live only here: if in doubt, it belongs in a formal note.'
   },
   {
     icon:'04', name:'No documentation needed',
-    bestFor:'<b>Use for:</b> Truly logistical, non-clinical exchanges (e.g. confirming a meeting time) with no bearing on care.',
-    avoid:'When unsure whether something counts as "clinical," default to documenting briefly :it\'s cheap insurance.'
+    bestFor:'<b>Use for:</b> Truly logistical, non-clinical exchanges (e.g., confirming a meeting time) with no bearing on care.',
+    avoid: ' When unsure whether something counts as "clinical," default to documenting briefly:it\'s cheap insurance.'
   }
 ];
 
@@ -499,11 +499,11 @@ function computeResult(){
 
   // Cross-check note: highlight when channel and documentation choices are in tension
   if(urgency === 'urgent' && record !== 'yes'){
-    note = 'Worth noting: you marked this as urgent but not clearly record-required. In practice, urgent contacts almost always warrant documentation:when in doubt, write the note.';
+    note = 'Worth noting: you marked this as urgent but not clearly record-required. In practice, urgent contacts almost always warrant documentation: when in doubt, write the note.';
   } else if(sensitivity === 'high' && record === 'no'){
-    note = 'Worth noting: high-sensitivity content and "no documentation needed" rarely go together in real practice :double check whether this really doesn\'t belong in the record.';
+    note = 'Worth noting: high-sensitivity content and "no documentation needed" rarely go together in real practice: double check whether this really doesn\'t belong in the record.';
   } else {
-    note = 'These two choices reinforce each other here :channel and documentation are pointing the same direction.';
+    note = 'These two choices reinforce each other here, channel and documentation are pointing in the same direction.';
   }
 
   document.getElementById('result-channel').textContent = channel;
