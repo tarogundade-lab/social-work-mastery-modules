@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Impact Challenge: Competency Reflection</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:860px;
+    margin:0 auto;
+    padding:28px 24px 90px;
+  }
+
+  .tool-header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:22px;
+  }
+  .tool-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .tool-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:25px;
+    margin:0 0 8px;
+  }
+  .tool-sub{
+    font-size:14px;
+    color:var(--warmgray);
+    max-width:600px;
+    line-height:1.5;
+  }
+
+  .submit-instruction{
+    background:rgba(92,138,134,0.1);
+    border:1px solid rgba(92,138,134,0.3);
+    border-radius:4px;
+    padding:13px 16px;
+    font-size:13.5px;
+    color:var(--sage-deep);
+    line-height:1.5;
+    margin-bottom:20px;
+    font-weight:500;
+  }
+
+  .framework-note{
+    background:rgba(201,123,74,0.08);
+    border:1px solid rgba(201,123,74,0.25);
+    border-radius:4px;
+    padding:12px 15px;
+    font-size:12.5px;
+    color:var(--clay-deep);
+    line-height:1.5;
+    margin-bottom:22px;
+  }
+
+  .competency-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:20px 22px;
+    margin-bottom:14px;
+    position:relative;
+  }
+  .competency-card::before{
+    content:"";
+    position:absolute;
+    left:0; top:18px; bottom:18px;
+    width:3px;
+    background:var(--sage);
+    border-radius:0 2px 2px 0;
+  }
+  .comp-head{
+    display:flex;
+    justify-content:space-between;
+    align-items:baseline;
+    margin-bottom:5px;
+  }
+  .comp-name{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:16.5px;
+  }
+  .comp-number{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--warmgray);
+  }
+  .comp-source{
+    font-size:11.5px;
+    color:var(--warmgray);
+    margin-bottom:12px;
+    font-style:italic;
+  }
+
+  .reflect-prompt{
+    font-size:13.5px;
+    color:var(--ink);
+    margin-bottom:10px;
+    line-height:1.5;
+  }
+  .reflect-textarea{
+    width:100%;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:11px 13px;
+    font-family:'Source Serif 4', serif;
+    font-size:14.5px;
+    min-height:70px;
+    resize:vertical;
+    background:var(--paper);
+    color:var(--ink);
+    margin-bottom:12px;
+  }
+  .reflect-textarea:focus-visible{ outline:2px solid var(--sage-deep); outline-offset:1px; }
+
+  .confidence-row{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+  }
+  .confidence-label{
+    font-size:12px;
+    color:var(--warmgray);
+    margin-right:6px;
+  }
+  .confidence-btn{
+    border:1px solid var(--line);
+    background:var(--paper);
+    border-radius:20px;
+    padding:5px 13px;
+    font-size:12px;
+    font-family:'Inter';
+    font-weight:500;
+    cursor:pointer;
+    color:var(--warmgray);
+  }
+  .confidence-btn.selected.strong{ border-color:var(--sage-deep); background:rgba(92,138,134,0.14); color:var(--sage-deep); }
+  .confidence-btn.selected.partial{ border-color:var(--clay-deep); background:rgba(201,123,74,0.14); color:var(--clay-deep); }
+  .confidence-btn.selected.gap{ border-color:#A8453E; background:rgba(168,69,62,0.1); color:#A8453E; }
+
+  .export-bar{
+    margin-top:24px;
+    text-align:center;
+  }
+  .export-btn{
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:4px;
+    padding:12px 24px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .export-btn:hover{ opacity:0.86; }
+
+  .export-hint{
+    font-size:12px;
+    color:var(--warmgray);
+    margin-top:10px;
+  }
+
+  .excluded-note{
+    margin-top:26px;
+    padding-top:18px;
+    border-top:1px dashed var(--line);
+    font-size:12.5px;
+    color:var(--warmgray);
+    line-height:1.5;
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="tool-header">
+    <span class="tool-eyebrow">Final Diagnostic · Digital Impact Challenge</span>
+    <h1 class="tool-title">Competency Reflection</h1>
+    <p class="tool-sub">Not a graded exam. A structured way to check your project against the course's core competencies before you submit, and a shared framework your instructor uses too.</p>
+  </div>
+
+  <div class="submit-instruction">
+    Complete this reflection for each competency below, then download it at the bottom and submit it together with your Digital Impact Challenge project.
+  </div>
+
+  <div class="framework-note" id="framework-note">
+    This reflects on your Digital Impact Challenge project against the program's stated competencies, drawn directly from the project's design requirements. It's diagnostic, not gating: it's meant to surface real strengths and real gaps, not produce a pass/fail score.
+  </div>
+
+  <div id="competency-container"></div>
+
+  <div class="export-bar" id="export-bar">
+    <button class="export-btn" id="export-btn">Download my self-assessment</button>
+    <div class="export-hint">Saves as a text file you can bring to a check-in or attach with your submission.</div>
+  </div>
+
+  <div class="excluded-note">Note: the project brief's "Recognition and Reward" point describes course-level prize criteria, not an individual competency, so it isn't included as a self-assessment item here.</div>
+
+</div>
+
+<script>
+const competencies = [
+  {
+    name:'Ethics & Confidentiality',
+    source:'NASW Code of Ethics, confidentiality, cultural respect, informed consent',
+    learnerPrompt:'How does your project handle confidentiality and informed consent? What ethical guidelines did you specifically apply?'
+  },
+  {
+    name:'Privacy & Security',
+    source:'Secure platforms, data protection, consent for data use',
+    learnerPrompt:'What specific platforms or methods are you using to protect participant data? How did you handle consent for any data collection?'
+  },
+  {
+    name:'Accessibility & Cultural Competence',
+    source:'Inclusive design, language access, cultural relevance to the population served',
+    learnerPrompt:'Who is this initiative for, and how did you design around their specific needs, language, or cultural context? What accessibility accommodations exist?'
+  },
+  {
+    name:'Professionalism & Boundaries',
+    source:'Professional conduct, communication, boundaries with clients and stakeholders',
+    learnerPrompt:'Where in your project design did you have to make a boundary or professionalism decision? How did you handle it?'
+  },
+  {
+    name:'Evidence-Based Practice',
+    source:'Grounded in research or established practice, not just intuition',
+    learnerPrompt:'What evidence, research, or established practice did you base your approach on? Cite at least one real source or precedent.'
+  },
+  {
+    name:'Collaboration & Stakeholder Input',
+    source:'Input from community organizations, peers, or the population served',
+    learnerPrompt:'Who did you actually talk to while designing this, if anyone? What did their input change about your approach?'
+  },
+  {
+    name:'Evaluation Plan',
+    source:'A plan to measure whether the initiative actually works',
+    learnerPrompt:'How will you know if this initiative is working? What will you actually measure, and how?'
+  },
+  {
+    name:'Resource Management',
+    source:'Realistic use of budget, technology, and partnerships',
+    learnerPrompt:'What does this actually cost or require to run, and is that realistic given what\'s actually available to you or your agency?'
+  }
+];
+
+let answers = {};
+
+const container = document.getElementById('competency-container');
+
+function renderCompetencies(){
+  container.innerHTML = competencies.map((c, i) => `
+    <div class="competency-card">
+      <div class="comp-head">
+        <span class="comp-name">${c.name}</span>
+        <span class="comp-number">${String(i+1).padStart(2,'0')} / ${String(competencies.length).padStart(2,'0')}</span>
+      </div>
+      <div class="comp-source">From: ${c.source}</div>
+      ${renderLearnerBlock(c, i)}
+    </div>
+  `).join('');
+
+  competencies.forEach((c,i)=>{
+    document.getElementById('reflect-text-' + i).addEventListener('input', (e)=>{
+      answers[i] = answers[i] || {};
+      answers[i].text = e.target.value;
+    });
+    document.querySelectorAll(`.confidence-btn[data-idx="${i}"]`).forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll(`.confidence-btn[data-idx="${i}"]`).forEach(b=> b.classList.remove('selected','strong','partial','gap'));
+        btn.classList.add('selected', btn.dataset.level);
+        answers[i] = answers[i] || {};
+        answers[i].confidence = btn.dataset.level;
+      });
+    });
+  });
+}
+
+function renderLearnerBlock(c, i){
+  const saved = answers[i] || {};
+  return `
+    <div class="reflect-prompt">${c.learnerPrompt}</div>
+    <textarea class="reflect-textarea" id="reflect-text-${i}" placeholder="Write your reflection here...">${saved.text || ''}</textarea>
+    <div class="confidence-row">
+      <span class="confidence-label">How confident are you here?</span>
+      <button class="confidence-btn ${saved.confidence==='strong'?'selected strong':''}" data-idx="${i}" data-level="strong">Strong</button>
+      <button class="confidence-btn ${saved.confidence==='partial'?'selected partial':''}" data-idx="${i}" data-level="partial">Partial</button>
+      <button class="confidence-btn ${saved.confidence==='gap'?'selected gap':''}" data-idx="${i}" data-level="gap">Real gap</button>
+    </div>
+  `;
+}
+
+document.getElementById('export-btn').addEventListener('click', ()=>{
+  let out = 'DIGITAL IMPACT CHALLENGE: COMPETENCY SELF-ASSESSMENT\n';
+  out += 'Generated: ' + new Date().toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'}) + '\n';
+  out += '='.repeat(60) + '\n\n';
+
+  competencies.forEach((c, i)=>{
+    const a = answers[i] || {};
+    out += `${i+1}. ${c.name}\n`;
+    out += `   Confidence: ${a.confidence ? a.confidence.toUpperCase() : 'Not marked'}\n`;
+    out += `   Reflection: ${a.text || '(not yet written)'}\n\n`;
+  });
+
+  out += '-'.repeat(60) + '\n';
+  out += 'Note: "Recognition and Reward" criteria are course-level prize considerations, not an individual competency, and are not included above.\n';
+
+  const blob = new Blob([out], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'digital-impact-challenge-self-assessment.txt';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+renderCompetencies();
+</script>
+
+</body>
+</html>
