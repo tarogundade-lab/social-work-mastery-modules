@@ -473,7 +473,7 @@
   <div class="case-header">
     <div class="left">
       <span class="case-id">CASE FILE NO. 0417-RA</span>
-      <h1 class="case-title">Initial Risk Assessment — Phone Intake</h1>
+      <h1 class="case-title">Initial Risk Assessment ,Phone Intake</h1>
     </div>
     <div class="case-meta">MODULE 4 OF 9<br>SCENARIO-BASED · ~12 MIN</div>
   </div>
@@ -539,7 +539,7 @@ const steps = {
     choices: [
       {
         letter:'A',
-        text:'"Okay, I need you to tell me everything you know right now — where is she, does she have access to anything she could hurt herself with?"',
+        text:'"Okay, I need you to tell me everything you know right now ,where is she, does she have access to anything she could hurt herself with?"',
         next:'rapport_rushed',
         flag:null
       },
@@ -565,11 +565,11 @@ const steps = {
     feedback:{
       type:'caution',
       label:'Field supervisor note',
-      text:`Leading with rapid-fire questions is a common first-call instinct — it feels efficient — but it can spike a panicked caller's anxiety further and make her feel interrogated rather than supported. Maren answers, but her speech speeds up and becomes harder to follow.`
+      text:`Leading with rapid-fire questions is a common first-call instinct; it feels efficient, but it can spike a panicked caller's anxiety further and make her feel interrogated rather than supported. Maren answers, but her speech speeds up and becomes harder to follow.`
     },
     text:`
       <span class="speaker">Maren, talking fast</span>
-      <p class="quote-line">"I don't — I don't know, she's not answering now, she could be anywhere, she has her car, oh god, should I be driving around looking for her—"</p>
+      <p class="quote-line">"I don't, I don't know, she's not answering now, she could be anywhere, she has her car, oh god, should I be driving around looking for her—"</p>
     `,
     note:`You've gotten urgency but not yet anything you can act on. You'll need to slow the pace down to get usable information.`,
     prompt:'Continue.',
@@ -585,11 +585,11 @@ const steps = {
     feedback:{
       type:'caution',
       label:'Field supervisor note',
-      text:`History of prior attempts is genuinely important data — but asked first, before any rapport, it can land as cold or clinical to a frightened family member, and may make her more guarded about what she shares next.`
+      text:`History of prior attempts is genuinely important data ,but asked first, before any rapport, it can land as cold or clinical to a frightened family member, and may make her more guarded about what she shares next.`
     },
     text:`
       <span class="speaker">Maren</span>
-      <p class="quote-line">"I — I don't know. Maybe once, in college? I don't know if that's even true, that was years ago. Why does that matter right now?"</p>
+      <p class="quote-line">"I ,I don't know. Maybe once, in college? I don't know if that's even true, that was years ago. Why does that matter right now?"</p>
     `,
     note:`She's not shutting down, but there's a new edge of defensiveness. Worth repairing before going further.`,
     prompt:'Continue.',
@@ -609,7 +609,7 @@ const steps = {
     },
     text:`
       <span class="speaker">Maren, voice unsteady</span>
-      <p class="quote-line">"Okay. Okay, thank you. She's been really withdrawn the last few weeks — lost her job in March, stopped answering our group chat. Tonight she texted me that, and then nothing."</p>
+      <p class="quote-line">"Okay. Okay, thank you. She's been really withdrawn the last few weeks ,lost her job in March, stopped answering our group chat. Tonight she texted me that, and then nothing."</p>
     `,
     note:`You now have a timeline (job loss, withdrawal) and a precipitant (the text). Time to gather risk-specific information.`,
     prompt:'What do you ask next?',
@@ -635,11 +635,11 @@ const steps = {
     stamp:{text:'CALLER STATE: REGAINING FOOTING', alert:false},
     text:`
       <span class="speaker">You</span>
-      <p class="quote-line">"You're doing the right thing calling. Let's slow down for one second — I'm not going anywhere. Take a breath with me, and then tell me what happened tonight."</p>
+      <p class="quote-line">"You're doing the right thing, calling. Let's slow down for one second. I'm not going anywhere. Take a breath with me, and then tell me what happened tonight."</p>
       <span class="speaker">Maren, slower now</span>
       <p class="quote-line">"...Okay. Sorry. She's been really withdrawn since she lost her job in March. Tonight she sent that text and then went quiet."</p>
     `,
-    note:`Re-anchoring worked — you now have a timeline and precipitant. Continue gathering risk information.`,
+    note:`Re-anchoring worked ,you now have a timeline and precipitant. Continue gathering risk information.`,
     prompt:'What do you ask next?',
     choices:[
       {
@@ -664,11 +664,11 @@ const steps = {
     feedback:{
       type:'good',
       label:'Field supervisor note',
-      text:`Directly and plainly asking about access to lethal means is one of the single highest-value questions in a risk assessment — it's not leading or suggestive, it's necessary. Asking it doesn't "put the idea in anyone's head"; that's a myth. Maren can answer it.`
+      text:`Directly and plainly asking about access to lethal means is one of the single highest-value questions in a risk assessment; it's not leading or suggestive, it's necessary. Asking it doesn't "put the idea in anyone's head"; that's a myth. Maren can answer it.`
     },
     text:`
       <span class="speaker">Maren</span>
-      <p class="quote-line">"There's no gun in the house, I know that much. But she's on antidepressants — there could be a full bottle, I don't know how much she has left."</p>
+      <p class="quote-line">"There's no gun in the house, I know that much. But she's on antidepressants, there could be a full bottle, I don't know how much she has left."</p>
     `,
     note:`Means: partial picture. No firearm, possible medication on hand, quantity unknown. Worth flagging for next steps but not yet definitive.`,
     prompt:'What do you explore next?',
@@ -681,7 +681,7 @@ const steps = {
       },
       {
         letter:'B',
-        text:'Ask about people or things that matter to Joy — anything that might be a protective pull.',
+        text:'Ask about people or things that matter to Joy, anything that might be a protective pull.',
         next:'protective_explore',
         flag:'protective'
       }
@@ -690,18 +690,18 @@ const steps = {
 
   collateral_first: {
     scene: 'two-phones',
-    caption: 'A second thread opens — the roommate',
+    caption: 'A second thread opens ,the roommate',
     stamp:{text:'RISK INDICATOR: SUPPORT NETWORK', alert:false},
     feedback:{
       type:'good',
       label:'Field supervisor note',
-      text:`Identifying who else might be reachable is valuable — it can open a faster path to physically checking on Joy. Just keep in mind means and plan still need direct attention; this doesn't replace them, it runs alongside them.`
+      text:`Identifying who else might be reachable is valuable; it can open a faster path to physically checking on Joy. Just keep in mind means and plan still need direct attention; this doesn't replace them, it runs alongside them.`
     },
     text:`
       <span class="speaker">Maren</span>
       <p class="quote-line">"Her roommate, maybe? They're not super close but they live together. I have her number actually."</p>
     `,
-    note:`A potential collateral contact identified. Means and plan are still unassessed — circle back.`,
+    note:`A potential collateral contact identified. Means and plan are still unassessed, circle back.`,
     prompt:'What do you ask next?',
     choices:[
       {
@@ -730,20 +730,20 @@ const steps = {
     },
     text:`
       <span class="speaker">Maren</span>
-      <p class="quote-line">"She said 'don't try to find me' — that's what scares me. Like she's already somewhere. She didn't say where. She's done this before, gone quiet for a day or two when things were bad, but never said something like that."</p>
+      <p class="quote-line">"She said 'don't try to find me', that's what scares me. Like she's already somewhere. She didn't say where. She's done this before, gone quiet for a day or two when things were bad, but never said something like that."</p>
     `,
     note:`No specific method or location named, but "don't try to find me" plus a prior pattern of withdrawal raises acuity. This is no longer a low-urgency call.`,
     prompt:'What do you explore next?',
     choices:[
       {
         letter:'A',
-        text:'Ask about protective factors — people, plans, or things Joy has expressed wanting to stay for.',
+        text:'Ask about protective factors ,people, plans, or things Joy has expressed wanting to stay for.',
         next:'protective_explore',
         flag:'protective'
       },
       {
         letter:'B',
-        text:'Move to disposition now — decide on next steps given what you have.',
+        text:'Move to disposition now ,decide on next steps given what you have.',
         next:'disposition_early',
         flag:null
       }
@@ -757,11 +757,11 @@ const steps = {
     feedback:{
       type:'good',
       label:'Field supervisor note',
-      text:`Protective factors aren't a counterweight that cancels out risk — they're context that shapes the safety plan. A strong protective factor can change what intervention looks like, but it doesn't lower urgency on its own.`
+      text:`Protective factors aren't a counterweight that cancels out risk, they're a context that shapes the safety plan. A strong protective factor can change what intervention looks like, but it doesn't lower urgency on its own.`
     },
     text:`
       <span class="speaker">Maren</span>
-      <p class="quote-line">"She loves her dog more than anything — wouldn't just leave him. And she's close with our mom, calls her most days. I don't think she'd want to hurt mom by doing this."</p>
+      <p class="quote-line">"She loves her dog more than anything, wouldn't just leave him. And she's close with our mom, calls her most days. I don't think she'd want to hurt mom by doing this."</p>
     `,
     note:`Protective factors identified: attachment to a pet, close relationship with mother. Real, but not sufficient alone to resolve the acute concern.</p>`,
     prompt:'You now have a fuller picture. What\'s your disposition?',
@@ -788,11 +788,11 @@ const steps = {
     feedback:{
       type:'caution',
       label:'Field supervisor note',
-      text:`Moving to disposition is reasonable given the acuity — but you skipped protective factors, which would have told you whether there's a fast, low-friction route to reach Joy (like the mother she calls daily). That gap may cost you time in the next step.`
+      text:`Moving to disposition is reasonable given the acuity, but you skipped protective factors, which would have told you whether there's a fast, low-friction route to reach Joy (like the mother she calls daily). That gap may cost you time in the next step.`
     },
     text:`
       <span class="speaker">You're deciding without protective factor information.</span>
-      <p>You have: withdrawal, job loss, a worrying text, ambiguous means, no specific plan but a request not to be found.</p>
+      <p>You have: withdrawal, job loss, a worrying text, ambiguous means, no specific plan, but a request not to be found.</p>
     `,
     note:`This is workable, but incomplete. Decide your disposition.`,
     prompt:'What\'s your disposition?',
@@ -819,13 +819,13 @@ const steps = {
     feedback:{
       type:'good',
       label:'Field supervisor note',
-      text:`Given a goodbye-adjacent message, an explicit request not to be found, and unresolved access to medication, defaulting to an immediate welfare check is a defensible — often the correct — call. When in doubt with this combination of indicators, erring toward a faster safety response is appropriate.`
+      text:`Given a goodbye-adjacent message, an explicit request not to be found, and unresolved access to medication, defaulting to an immediate welfare check is a defensible ,often the correct ,call. When in doubt with this combination of indicators, erring toward a faster safety response is appropriate.`
     },
     text:`
       <span class="speaker">You</span>
       <p class="quote-line">"Maren, I think the safest thing right now is for you to call 911 and request a welfare check at her address. I can stay on the line with you while you do that, or call them now while you keep trying to reach her."</p>
       <span class="speaker">Maren</span>
-      <p class="quote-line">"Okay — okay, I'll call them right now."</p>
+      <p class="quote-line">"Okay ,okay, I'll call them right now."</p>
     `,
     note:`End of scenario. See your full risk formulation in the sidebar.`,
     final:true
@@ -838,13 +838,13 @@ const steps = {
     feedback:{
       type:'caution',
       label:'Field supervisor note',
-      text:`A staged response can be appropriate when risk is more ambiguous and there's a fast, trusted contact available — but here, the combination of a goodbye-adjacent message and uncertain access to medication makes a delay riskier. This is a defensible judgment call, not a wrong answer, but most supervisors would push toward 911 sooner given what's on the table.`
+      text:`A staged response can be appropriate when risk is more ambiguous and there's a fast, trusted contact available ,but here, the combination of a goodbye-adjacent message and uncertain access to medication makes a delay riskier. This is a defensible judgment call, not a wrong answer, but most supervisors would push toward 911 sooner given what's on the table.`
     },
     text:`
       <span class="speaker">You</span>
-      <p class="quote-line">"Let's try two things at once — can you call the roommate right now, and also try texting Joy again? I'll stay on the line. If we don't hear back in the next few minutes, we call 911 together."</p>
+      <p class="quote-line">"Let's try two things at once ,can you call the roommate right now, and also try texting Joy again? I'll stay on the line. If we don't hear back in the next few minutes, we call 911 together."</p>
       <span class="speaker">Maren</span>
-      <p class="quote-line">"Okay — trying the roommate now."</p>
+      <p class="quote-line">"Okay ,trying the roommate now."</p>
     `,
     note:`End of scenario. See your full risk formulation in the sidebar.`,
     final:true
@@ -853,7 +853,7 @@ const steps = {
 
 /* ============================================================
    SCENE ILLUSTRATIONS
-   Soft, painterly SVG scenes — set mood without depicting an
+   Soft, painterly SVG scenes ,set mood without depicting an
    identifiable individual. Built from the design palette.
    ============================================================ */
 function sceneSVG(key){
@@ -1124,16 +1124,16 @@ function updateProgress(){
 function updateFormulation(){
   const parts = [];
   if(flagsSet.rapport) parts.push('Rapport established before risk questions.');
-  if(flagsSet.access) parts.push('Means: ambiguous — no firearm; medication access unconfirmed.');
+  if(flagsSet.access) parts.push('Means: ambiguous ,no firearm; medication access unconfirmed.');
   if(flagsSet.plan) parts.push('Intent: no specific method/location, but goodbye-adjacent language ("don\'t try to find me").');
   if(flagsSet.collateral) parts.push('Collateral contact identified (roommate).');
   if(flagsSet.protective) parts.push('Protective factors: pet attachment, close maternal relationship.');
-  if(flagsSet.disposition) parts.push('Disposition reached — see outcome.');
+  if(flagsSet.disposition) parts.push('Disposition reached ,see outcome.');
 
   if(parts.length === 0){
     formulationBox.innerHTML = '<span class="empty">Your working formulation will appear here as you gather information.</span>';
   } else {
-    formulationBox.innerHTML = parts.map(p => '— ' + p).join('<br>');
+    formulationBox.innerHTML = parts.map(p => ',' + p).join('<br>');
   }
 }
 
@@ -1233,7 +1233,7 @@ function renderFinalCTA(){
 
   return `
     <div class="debrief">
-      <h2>Case closed — debrief</h2>
+      <h2>Case closed ,debrief</h2>
       <div class="sub">Here's how your assessment unfolded, and what a supervisor would flag in review.</div>
 
       <div class="summary-grid">
@@ -1247,9 +1247,9 @@ function renderFinalCTA(){
         </div>
       </div>
 
-      <div class="decision-prompt" style="margin-top:4px;">Reflection — before you move on</div>
+      <div class="decision-prompt" style="margin-top:4px;">Reflection ,before you move on</div>
       <div class="field-note" style="margin-top:0;">
-        <b>Consider:</b> Which indicator did you reach last, or not at all, in this run? In a live call, what would you do differently to make sure you cover means, intent, and protective factors even under time pressure? There's no single "correct" order — but a complete picture matters more than a fast one.
+        <b>Consider:</b> Which indicator did you reach last, or not at all, in this run? In a live call, what would you do differently to make sure you cover means, intent, and protective factors even under time pressure? There's no single "correct" order ,but a complete picture matters more than a fast one.
       </div>
 
       <button class="restart-btn" id="restart-btn">↺ Run the scenario again, choose differently</button>
