@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Practice Session — Engaging a Resistant Client</title>
+<title>Practice Session, Engaging a Resistant Client</title>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400;1,8..60,500&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 
@@ -437,8 +437,8 @@
   <div id="briefing-screen">
     <div class="briefing">
       <h2>Before you begin</h2>
-      <p>You're meeting <b>Theo, 41</b>, for an intake session. He was referred after his children's school flagged housing instability and inconsistent attendance. He didn't request this meeting — it was arranged for him. He's not hostile, but he's guarded, and he's been through this kind of meeting before with little to show for it.</p>
-      <p>Your goal isn't to fix anything in this one conversation. It's to practice drawing him out — using open questions, reflections, and affirmations rather than directing or persuading — so that by the end of the conversation, he's said more than you have.</p>
+      <p>You're meeting <b>Theo, 41</b>, for an intake session. He was referred after his children's school flagged housing instability and inconsistent attendance. He didn't request this meeting ,it was arranged for him. He's not hostile, but he's guarded, and he's been through this kind of meeting before with little to show for it.</p>
+      <p>Your goal isn't to fix anything in this one conversation. It's to practice drawing him out ,using open questions, reflections, and affirmations rather than directing or persuading ,so that by the end of the conversation, he's said more than you have.</p>
       <div class="client-facts">
         <div class="fact"><b>Presenting issue</b>Housing instability, school concern</div>
         <div class="fact"><b>Stance</b>Guarded, not hostile</div>
@@ -470,7 +470,7 @@
         <div class="tally-row"><span class="tally-label">Reflections</span><span class="tally-count" id="tally-reflection">0</span></div>
         <div class="tally-row"><span class="tally-label">Affirmations</span><span class="tally-count" id="tally-affirmation">0</span></div>
         <div class="tally-row"><span class="tally-label">Telling / advising</span><span class="tally-count warn" id="tally-telling">0</span></div>
-        <div class="rail-note">Tags appear as you talk. They're a rough read, not a precise score — use them to notice patterns, not to chase a number.</div>
+        <div class="rail-note">Tags appear as you talk. They're a rough read, not a precise score ,use them to notice patterns, not to chase a number.</div>
       </div>
     </div>
   </div>
@@ -490,11 +490,11 @@ let sessionEnded = false;
 
 const CLIENT_SYSTEM_PROMPT = `You are roleplaying as Theo, a 41-year-old man in a social work intake session. Stay fully in character as Theo for the entire conversation. Never break character, never mention you are an AI, never offer meta-commentary on the conversation.
 
-BACKGROUND: Theo was referred to this intake after his children's school raised concerns about housing instability and inconsistent school attendance. He did not request this meeting himself — it was arranged through the school's referral. He has two kids, ages 8 and 11. He's currently staying with his brother after losing his apartment two months ago following a job loss. He's proud, doesn't like feeling judged or "handled," and has had unhelpful experiences with services before — a caseworker once talked at him for 40 minutes and he left feeling like nothing was actually heard.
+BACKGROUND: Theo was referred to this intake after his children's school raised concerns about housing instability and inconsistent school attendance. He did not request this meeting himself ,it was arranged through the school's referral. He has two kids, ages 8 and 11. He's currently staying with his brother after losing his apartment two months ago following a job loss. He's proud, doesn't like feeling judged or "handled," and has had unhelpful experiences with services before ,a caseworker once talked at him for 40 minutes and he left feeling like nothing was actually heard.
 
-PERSONALITY: Guarded but not hostile or aggressive. He answers questions but keeps responses fairly short and surface-level at first. He is watching for whether this caseworker is actually listening or just running through a checklist. If the caseworker asks closed yes/no questions back to back, or lectures/advises early, Theo becomes more closed off, shorter, slightly defensive ("I've heard this before," "look, I know what I need to do"). If the caseworker asks genuine open questions and reflects back what he says accurately, Theo gradually opens up — mentions more specifics (his pride about providing for his kids, his worry about them noticing the stress, his frustration with his brother's small apartment, his hesitance to ask for help).
+PERSONALITY: Guarded but not hostile or aggressive. He answers questions but keeps responses fairly short and surface-level at first. He is watching for whether this caseworker is actually listening or just running through a checklist. If the caseworker asks closed yes/no questions back to back, or lectures/advises early, Theo becomes more closed off, shorter, slightly defensive ("I've heard this before," "look, I know what I need to do"). If the caseworker asks genuine open questions and reflects back what he says accurately, Theo gradually opens up ,mentions more specifics (his pride about providing for his kids, his worry about them noticing the stress, his frustration with his brother's small apartment, his hesitance to ask for help).
 
-IMPORTANT: Respond only as Theo would speak in the conversation — natural, conversational, realistic length (1-4 sentences typically, occasionally longer if he's opened up). Do not narrate stage directions or describe his body language in brackets. Just speak as him.`;
+IMPORTANT: Respond only as Theo would speak in the conversation ,natural, conversational, realistic length (1-4 sentences typically, occasionally longer if he's opened up). Do not narrate stage directions or describe his body language in brackets. Just speak as him.`;
 
 const transcriptScroll = document.getElementById('transcript-scroll');
 const typingIndicator = document.getElementById('typing-indicator');
@@ -531,12 +531,12 @@ Theo's previous line (for context, may be empty if this is the first message): "
 Caseworker's line to classify: "${text}"
 
 Classify this single line into EXACTLY ONE of these categories, choosing the single most dominant technique present:
-- "open" — an open-ended question that invites elaboration (cannot be answered yes/no/one word)
-- "closed" — a closed/yes-no question, or a question seeking a specific narrow fact
-- "reflection" — a reflective listening statement that mirrors or paraphrases what Theo said/felt, without adding a question or new direction
-- "affirmation" — a genuine affirming statement recognizing Theo's strength, effort, or values
-- "telling" — advice-giving, lecturing, directing, or persuading rather than drawing out
-- "neutral" — none of the above clearly apply (e.g. simple acknowledgment, transition, greeting)
+- "open" ,an open-ended question that invites elaboration (cannot be answered yes/no/one word)
+- "closed" ,a closed/yes-no question, or a question seeking a specific narrow fact
+- "reflection" ,a reflective listening statement that mirrors or paraphrases what Theo said/felt, without adding a question or new direction
+- "affirmation" ,a genuine affirming statement recognizing Theo's strength, effort, or values
+- "telling" ,advice-giving, lecturing, directing, or persuading rather than drawing out
+- "neutral" ,none of the above clearly apply (e.g. simple acknowledgment, transition, greeting)
 
 Respond with ONLY the single category word, nothing else. No punctuation, no explanation.`;
 
@@ -623,14 +623,14 @@ async function startSession(){
   typingIndicator.classList.remove('hidden');
   try{
     const opening = await callClaude(
-      [{role:'user', content: 'Begin the session. Theo has just sat down across from the caseworker. Give his opening line — guarded, brief, maybe a little wary about why he is even here.'}],
+      [{role:'user', content: 'Begin the session. Theo has just sat down across from the caseworker. Give his opening line ,guarded, brief, maybe a little wary about why he is even here.'}],
       CLIENT_SYSTEM_PROMPT,
       300
     );
     conversation.push({role:'assistant', content: opening});
     renderMessage('assistant', opening);
   }catch(e){
-    renderMessage('assistant', "[Connection issue starting the session — try refreshing.]");
+    renderMessage('assistant', "[Connection issue starting the session ,try refreshing.]");
     console.error(e);
   }finally{
     typingIndicator.classList.add('hidden');
@@ -680,7 +680,7 @@ async function sendMessage(){
     conversation.push({role:'assistant', content: theoReply});
     renderMessage('assistant', theoReply);
   }catch(e){
-    renderMessage('assistant', "[Theo seems distracted — connection issue. Try sending again.]");
+    renderMessage('assistant', "[Theo seems distracted ,connection issue. Try sending again.]");
     console.error(e);
   }finally{
     typingIndicator.classList.add('hidden');
@@ -727,7 +727,7 @@ Respond ONLY with a JSON object (no markdown fences, no preamble) with this exac
     console.error('Debrief error', e);
     debriefScreen.innerHTML = `
       <div class="debrief">
-        <div class="error-banner">The review couldn't be generated this time. Your technique tally is still below — you can also just reread the transcript yourself.</div>
+        <div class="error-banner">The review couldn't be generated this time. Your technique tally is still below ,you can also just reread the transcript yourself.</div>
         <button class="restart-btn" id="restart-btn-err">↺ Start a new session</button>
       </div>`;
     document.getElementById('restart-btn-err').addEventListener('click', resetSession);
