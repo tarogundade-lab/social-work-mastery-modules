@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI &amp; Virtual Assistance: Where It Helps, Where It Doesn't</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,500;0,8..60,600;0,8..60,700;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  :root{
+    --ink:#1B2A2E;
+    --paper:#F7F4EE;
+    --paper-raised:#FFFFFF;
+    --sage:#5C8A86;
+    --sage-deep:#2D5A52;
+    --clay:#C97B4A;
+    --clay-deep:#A85A2E;
+    --warmgray:#8B8478;
+    --line:#DDD7C8;
+    --shadow: 0 1px 2px rgba(27,42,46,0.06), 0 4px 16px rgba(27,42,46,0.08);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:var(--paper);
+    color:var(--ink);
+    font-family:'Inter', sans-serif;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  .app{
+    max-width:880px;
+    margin:0 auto;
+    padding:28px 24px 90px;
+  }
+
+  .tool-header{
+    border-bottom:2px solid var(--ink);
+    padding-bottom:16px;
+    margin-bottom:8px;
+  }
+  .tool-eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11.5px;
+    letter-spacing:0.08em;
+    color:var(--warmgray);
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .tool-title{
+    font-family:'Source Serif 4', serif;
+    font-weight:600;
+    font-size:25px;
+    margin:0 0 8px;
+  }
+  .tool-sub{
+    font-size:14px;
+    color:var(--warmgray);
+    max-width:600px;
+    line-height:1.5;
+  }
+
+  .section-divider{
+    margin: 36px 0 22px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .section-divider .sd-label{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--warmgray);
+    white-space:nowrap;
+  }
+  .section-divider .sd-line{ flex:1; height:1px; background:var(--line); }
+
+  .scenario-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:22px 24px;
+    margin-bottom:16px;
+  }
+  .scenario-progress{
+    font-family:'JetBrains Mono', monospace;
+    font-size:11px;
+    color:var(--warmgray);
+    margin-bottom:10px;
+  }
+  .scenario-text{
+    font-family:'Source Serif 4', serif;
+    font-size:16px;
+    line-height:1.6;
+    margin-bottom:18px;
+  }
+  .scenario-choices{
+    display:flex;
+    gap:10px;
+    margin-bottom:16px;
+    flex-wrap:wrap;
+  }
+  .scenario-btn{
+    flex:1;
+    min-width:140px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:12px 14px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13.5px;
+    cursor:pointer;
+    text-align:center;
+  }
+  .scenario-btn:hover{ border-color:var(--sage); }
+  .scenario-btn.chosen-appropriate{ border-color:var(--sage-deep); background:rgba(92,138,134,0.12); }
+  .scenario-btn.chosen-not{ border-color:var(--clay-deep); background:rgba(201,123,74,0.12); }
+
+  .scenario-feedback{
+    display:none;
+    border-top:1px dashed var(--line);
+    padding-top:14px;
+    font-size:14px;
+    line-height:1.6;
+  }
+  .scenario-feedback.show{ display:block; animation:fadeIn 0.3s ease; }
+  @keyframes fadeIn{ from{opacity:0;} to{opacity:1;} }
+  .scenario-feedback .verdict{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    display:block;
+    margin-bottom:6px;
+  }
+  .verdict.appropriate{ color:var(--sage-deep); }
+  .verdict.caution{ color:var(--clay-deep); }
+
+  .scenario-next-btn{
+    margin-top:14px;
+    background:var(--ink);
+    color:var(--paper);
+    border:none;
+    border-radius:4px;
+    padding:9px 18px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+  }
+
+  .demo-card{
+    background:var(--paper-raised);
+    border:1px solid var(--line);
+    border-radius:4px;
+    box-shadow:var(--shadow);
+    padding:24px 26px;
+  }
+  .demo-intro{
+    font-size:14px;
+    line-height:1.6;
+    margin-bottom:18px;
+  }
+  .rough-notes-box{
+    background:#FBFAF6;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:14px 16px;
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    line-height:1.7;
+    color:var(--ink);
+    margin-bottom:18px;
+    white-space:pre-wrap;
+  }
+
+  .generate-btn{
+    background:var(--sage-deep);
+    color:#fff;
+    border:none;
+    border-radius:4px;
+    padding:11px 22px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:14px;
+    cursor:pointer;
+  }
+  .generate-btn:hover{ opacity:0.88; }
+  .generate-btn:disabled{ opacity:0.5; cursor:not-allowed; }
+
+  .ai-output-zone{
+    margin-top:20px;
+    display:none;
+  }
+  .ai-output-zone.show{ display:block; }
+
+  .ai-output-label{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:11px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--sage-deep);
+    margin-bottom:8px;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .ai-output-text{
+    background:#FBFAF6;
+    border:1px solid var(--line);
+    border-left:3px solid var(--sage);
+    border-radius:4px;
+    padding:16px 18px;
+    font-family:'Source Serif 4', serif;
+    font-size:14.5px;
+    line-height:1.65;
+    white-space:pre-wrap;
+    margin-bottom:20px;
+  }
+
+  .eval-prompt{
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13.5px;
+    margin-bottom:12px;
+  }
+  .eval-checklist{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
+    margin-bottom:18px;
+  }
+  .eval-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    font-size:13.5px;
+    cursor:pointer;
+  }
+  .eval-checkbox{
+    width:19px; height:19px;
+    border:2px solid var(--line);
+    border-radius:4px;
+    flex-shrink:0;
+    margin-top:1px;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .eval-checkbox.checked{ background:var(--clay); border-color:var(--clay-deep); color:#fff; font-size:12px; }
+
+  .eval-reveal{
+    display:none;
+    background:rgba(201,123,74,0.08);
+    border:1px solid rgba(201,123,74,0.25);
+    border-radius:4px;
+    padding:16px 18px;
+    font-size:13.5px;
+    line-height:1.6;
+  }
+  .eval-reveal.show{ display:block; }
+  .eval-reveal h4{
+    font-family:'Inter';
+    font-weight:700;
+    font-size:12px;
+    letter-spacing:0.03em;
+    text-transform:uppercase;
+    color:var(--clay-deep);
+    margin:0 0 10px;
+  }
+  .eval-reveal ul{ margin:0; padding-left:18px; }
+  .eval-reveal li{ margin-bottom:6px; }
+
+  .reveal-btn{
+    background:transparent;
+    border:1px solid var(--clay);
+    color:var(--clay-deep);
+    border-radius:4px;
+    padding:9px 18px;
+    font-family:'Inter';
+    font-weight:600;
+    font-size:13px;
+    cursor:pointer;
+  }
+  .reveal-btn:hover{ background:rgba(201,123,74,0.1); }
+
+  .loading-note{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12px;
+    color:var(--warmgray);
+    margin-top:10px;
+  }
+
+  .closing-note{
+    margin-top:22px;
+    padding-top:18px;
+    border-top:1px dashed var(--line);
+    font-size:13px;
+    color:var(--warmgray);
+    line-height:1.6;
+  }
+
+  .hidden{ display:none !important; }
+</style>
+</head>
+<body>
+
+<div class="app">
+
+  <div class="tool-header">
+    <span class="tool-eyebrow">Module 11 · AI &amp; Virtual Assistance</span>
+    <h1 class="tool-title">Where AI Helps, Where It Doesn't</h1>
+    <p class="tool-sub">Two parts: first, a few real judgment calls about using AI in practice. Then, you try it yourself on a real task and see exactly where it helps and where it falls short.</p>
+  </div>
+
+  <div class="section-divider">
+    <span class="sd-label">Part One: Judgment Calls</span>
+    <span class="sd-line"></span>
+  </div>
+
+  <div id="scenario-container"></div>
+
+  <div class="section-divider">
+    <span class="sd-label">Part Two: Try It Yourself</span>
+    <span class="sd-line"></span>
+  </div>
+
+  <div class="demo-card">
+    <div class="demo-intro">
+      Below are rough, real-feeling notes a caseworker jotted down right after a session, the kind of thing you might actually type in a hurry. You're going to have AI turn this into a first-draft progress note, then evaluate what it got right and what it missed.
+    </div>
+
+    <div class="rough-notes-box">client seemed tired today, said sleeping bad again. mentioned the eviction notice from landlord, due in 12 days. didn't want to talk much about the kids today, redirected when I brought it up. agreed to follow up with legal aid number i gave her last time, not sure if she actually called yet. seemed a little more withdrawn than last visit. end of session she said "i think i just need to get through this week"</div>
+
+    <button class="generate-btn" id="generate-btn">Generate a draft progress note</button>
+    <div class="loading-note hidden" id="loading-note">Drafting…</div>
+
+    <div class="ai-output-zone" id="ai-output-zone">
+      <div class="ai-output-label">⚡ AI-generated draft</div>
+      <div class="ai-output-text" id="ai-output-text"></div>
+
+      <div class="eval-prompt">Before reading our notes below, what do you notice is missing or concerning in this draft? Check anything you spot:</div>
+      <div class="eval-checklist" id="eval-checklist"></div>
+
+      <button class="reveal-btn" id="reveal-btn">Reveal what a careful reviewer would flag</button>
+
+      <div class="eval-reveal" id="eval-reveal"></div>
+
+      <div class="closing-note">This is the real shape of AI assistance in practice: genuinely useful for structuring and tidying language, genuinely blind to clinical significance, omissions, and risk, because it only knows what's on the page, not what should be on the page. That gap is exactly where your judgment stays necessary.</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const scenarios = [
+  {
+    text:'A colleague wants to use an AI tool to summarize a long case file before a supervision meeting, to save time reviewing it. The file contains identifying client details.',
+    verdict:'caution',
+    feedback:'This depends entirely on the tool and your agency\'s policy. If it\'s a consumer AI tool not covered by your agency\'s data agreements or compliant infrastructure, entering identifying client details is a real confidentiality risk, the same way it would be wrong to paste a case file into any other unapproved external service. The time savings doesn\'t change the privacy obligation. If your agency has an approved, compliant AI tool for this, the calculus changes.'
+  },
+  {
+    text:'A caseworker uses AI to draft a first-pass progress note from their own rough notes, then reviews and edits it before submitting, the same way they\'d review any draft.',
+    verdict:'appropriate',
+    feedback:'This is a defensible, common use case: AI assisting with structure and language, with a human reviewing for accuracy, completeness, and clinical judgment before anything is finalized. The key word is "reviews", this only stays appropriate if the human genuinely checks the draft rather than rubber-stamping it.'
+  },
+  {
+    text:'A supervisor asks an AI tool to determine whether a specific case should be classified as high-risk, based on a written summary, and uses that output as the determination.',
+    verdict:'caution',
+    feedback:'Risk classification is exactly the kind of clinical judgment call that shouldn\'t be delegated to an AI output, especially not treated as a determination rather than an input. AI can help organize the relevant factors, similar to a checklist, but the actual judgment, weighing nuance, context, and things that aren\'t written down at all, needs a qualified human, with appropriate supervision and accountability.'
+  },
+  {
+    text:'A practitioner uses an AI assistant to help brainstorm language for a difficult email to a client\'s family, then significantly rewrites it in their own voice before sending.',
+    verdict:'appropriate',
+    feedback:'Using AI as a brainstorming or drafting aid for communication, where the practitioner remains the author and reviews/rewrites before anything goes out, is a reasonable use of the tool, similar to using a thesaurus or asking a colleague to look over a draft.'
+  }
+];
+
+let scenarioIndex = 0;
+const scenarioContainer = document.getElementById('scenario-container');
+
+function renderScenario(){
+  const s = scenarios[scenarioIndex];
+  scenarioContainer.innerHTML = `
+    <div class="scenario-card">
+      <div class="scenario-progress">Scenario ${scenarioIndex+1} of ${scenarios.length}</div>
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-choices">
+        <button class="scenario-btn" data-choice="appropriate">Appropriate use</button>
+        <button class="scenario-btn" data-choice="not">Crosses a line</button>
+      </div>
+      <div class="scenario-feedback" id="scenario-feedback"></div>
+    </div>
+  `;
+
+  document.querySelectorAll('.scenario-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=> handleScenarioChoice(btn, s));
+  });
+}
+
+function handleScenarioChoice(btn, s){
+  document.querySelectorAll('.scenario-btn').forEach(b=> b.disabled = true);
+  btn.classList.add(btn.dataset.choice === 'appropriate' ? 'chosen-appropriate' : 'chosen-not');
+
+  const feedbackEl = document.getElementById('scenario-feedback');
+  const verdictLabel = s.verdict === 'appropriate' ? 'Generally appropriate' : 'Worth real caution';
+  const verdictClass = s.verdict === 'appropriate' ? 'appropriate' : 'caution';
+
+  feedbackEl.innerHTML = `
+    <span class="verdict ${verdictClass}">${verdictLabel}</span>
+    ${s.feedback}
+    ${scenarioIndex < scenarios.length - 1 ? '<button class="scenario-next-btn" id="next-scenario-btn">Next scenario →</button>' : '<div style="margin-top:10px; font-size:12.5px; color:var(--warmgray);">That\'s all four. Scroll down to try the hands-on part.</div>'}
+  `;
+  feedbackEl.classList.add('show');
+
+  if(scenarioIndex < scenarios.length - 1){
+    document.getElementById('next-scenario-btn').addEventListener('click', ()=>{
+      scenarioIndex++;
+      renderScenario();
+    });
+  }
+}
+
+renderScenario();
+
+const roughNotes = `client seemed tired today, said sleeping bad again. mentioned the eviction notice from landlord, due in 12 days. didn't want to talk much about the kids today, redirected when I brought it up. agreed to follow up with legal aid number i gave her last time, not sure if she actually called yet. seemed a little more withdrawn than last visit. end of session she said "i think i just need to get through this week"`;
+
+const evalChecklistItems = [
+  'It doesn\'t flag the eviction timeline (12 days) as something needing urgent follow-up',
+  'It doesn\'t note that the client redirected away from talking about her kids, a potentially significant pattern',
+  'It doesn\'t flag "more withdrawn than last visit" as a change worth tracking or escalating',
+  'It treats "I think I just need to get through this week" as a closing remark, not a possible signal worth exploring',
+  'It can\'t tell you whether the legal aid follow-up actually happened, only that it was "discussed" in some form'
+];
+
+document.getElementById('generate-btn').addEventListener('click', generateDraftNote);
+
+async function generateDraftNote(){
+  const btn = document.getElementById('generate-btn');
+  const loadingNote = document.getElementById('loading-note');
+  btn.disabled = true;
+  loadingNote.classList.remove('hidden');
+
+  const prompt = `You are an AI assistant helping a social worker draft a first-pass progress note from their rough session notes. Write a clean, professionally-structured draft progress note based on the rough notes below. Write it the way a generally competent but not specially-trained AI assistant would: reasonably well organized and clearly written, but without adding clinical interpretation, risk flags, or follow-up recommendations beyond what's explicitly stated in the notes. Do not editorialize or flag anything as urgent or concerning, just neutrally organize and write up what's there, the way an AI drafting tool genuinely would if just asked to "clean this up into a note." Keep it to one short paragraph, written in third person professional case-note style.
+
+Rough notes:
+"${roughNotes}"
+
+Respond with ONLY the draft note text, nothing else. No preamble, no labels.`;
+
+  try{
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-6",
+        max_tokens: 400,
+        messages: [{role:'user', content: prompt}]
+      })
+    });
+    const data = await response.json();
+    const textBlocks = data.content.filter(b=> b.type === 'text').map(b=> b.text);
+    const draftNote = textBlocks.join('\n').trim();
+
+    document.getElementById('ai-output-text').textContent = draftNote;
+    renderEvalChecklist();
+    document.getElementById('ai-output-zone').classList.add('show');
+    document.getElementById('ai-output-zone').scrollIntoView({behavior:'smooth', block:'start'});
+  }catch(e){
+    document.getElementById('ai-output-text').textContent = '[Could not generate a draft right now. Connection issue. Try again.]';
+    document.getElementById('ai-output-zone').classList.add('show');
+    console.error(e);
+  }finally{
+    loadingNote.classList.add('hidden');
+    btn.disabled = false;
+    btn.textContent = 'Generate again (try it twice, output varies)';
+  }
+}
+
+function renderEvalChecklist(){
+  const el = document.getElementById('eval-checklist');
+  el.innerHTML = evalChecklistItems.map((item, i) => `
+    <div class="eval-item" data-idx="${i}">
+      <div class="eval-checkbox" id="evalcheck-${i}"></div>
+      <span>${item}</span>
+    </div>
+  `).join('');
+
+  el.querySelectorAll('.eval-item').forEach(row=>{
+    row.addEventListener('click', ()=>{
+      const idx = row.dataset.idx;
+      const box = document.getElementById('evalcheck-' + idx);
+      const isChecked = box.classList.toggle('checked');
+      box.textContent = isChecked ? '✓' : '';
+    });
+  });
+}
+
+document.getElementById('reveal-btn').addEventListener('click', ()=>{
+  const revealEl = document.getElementById('eval-reveal');
+  revealEl.innerHTML = `
+    <h4>What a careful reviewer would flag</h4>
+    <ul>
+      ${evalChecklistItems.map(item => `<li>${item}</li>`).join('')}
+    </ul>
+    <p style="margin-top:10px; margin-bottom:0;">Notice: the AI didn't get anything "wrong" exactly, it organized what was given. The gap is entirely in what it doesn't know to look for. That noticing is the clinical skill no draft tool replaces.</p>
+  `;
+  revealEl.classList.add('show');
+  revealEl.scrollIntoView({behavior:'smooth', block:'nearest'});
+});
+</script>
+
+</body>
+</html>
